@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Menu — Toran Burger</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg-base: #0a0a08;
+    --bg-card: #111110;
+    --bg-elevated: #181815;
+    --bg-hover: #1e1e1a;
+    --text-primary: #f5f0e8;
+    --text-secondary: rgba(245,240,232,0.62);
+    --text-muted: rgba(245,240,232,0.38);
+    --border-subtle: rgba(245,240,232,0.06);
+    --border-default: rgba(245,240,232,0.10);
+    --border-hover: rgba(245,240,232,0.20);
+    --accent: #e8a020;
+    --accent-glow: rgba(232,160,32,0.18);
+    --radius-lg: 16px;
+    --radius-xl: 20px;
+    --radius-pill: 9999px;
+    --ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-smooth: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: var(--bg-base);
+    color: var(--text-primary);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.04;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+    background-size: 200px;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    background: rgba(17,17,16,0.82);
+    backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-pill);
+    padding: 6px 8px;
+  }
+  .nav-logo {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+    margin-right: 4px;
+    margin-left: 4px;
+    filter: drop-shadow(0 0 6px rgba(232,160,32,0.3));
+  }
+  nav a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    padding: 7px 16px;
+    border-radius: var(--radius-pill);
+    transition: color 0.2s var(--ease-smooth), background 0.2s var(--ease-smooth);
+  }
+  nav a:hover { color: var(--text-primary); background: var(--bg-elevated); }
+  nav a.active { color: var(--accent); background: rgba(232,160,32,0.1); }
+
+  /* PAGE HEADER */
+  .page-header {
+    padding: 140px 24px 72px;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+  }
+  .page-header::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 50%; transform: translateX(-50%);
+    width: 800px; height: 500px;
+    background: radial-gradient(ellipse at center,
+      rgba(232,160,32,0.1) 0%, transparent 65%);
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .page-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(232,160,32,0.08);
+    border: 1px solid rgba(232,160,32,0.2);
+    border-radius: var(--radius-pill);
+    padding: 6px 14px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--accent);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+
+  .page-title {
+    font-family: 'Instrument Serif', Georgia, serif;
+    font-size: clamp(44px, 7vw, 88px);
+    font-weight: 400;
+    letter-spacing: -0.03em;
+    line-height: 0.93;
+    background: linear-gradient(180deg, #f5f0e8 30%, rgba(245,240,232,0.5) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .page-sub {
+    font-size: 16px;
+    color: var(--text-secondary);
+    margin-top: 20px;
+    max-width: 44ch;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.6;
+    letter-spacing: -0.005em;
+  }
+
+  /* FILTER TABS */
+  .filter-wrap {
+    position: sticky;
+    top: 70px;
+    z-index: 90;
+    padding: 0 24px 0;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 64px;
+  }
+
+  .filter-tabs {
+    display: flex;
+    gap: 6px;
+    background: rgba(17,17,16,0.85);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-pill);
+    padding: 6px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    max-width: 100%;
+  }
+  .filter-tabs::-webkit-scrollbar { display: none; }
+
+  .filter-tab {
+    flex: 0 0 auto;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    color: var(--text-secondary);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px 18px;
+    border-radius: var(--radius-pill);
+    transition: color 0.2s var(--ease-smooth), background 0.2s var(--ease-smooth);
+    white-space: nowrap;
+  }
+  .filter-tab:hover { color: var(--text-primary); background: var(--bg-elevated); }
+  .filter-tab.active { color: #0a0a08; background: var(--accent); font-weight: 600; }
+
+  /* MENU GRID */
+  .menu-wrap {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px 100px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .category-section { margin-bottom: 80px; }
+  .category-section[data-cat]:not(.visible-cat) { display: none; }
+
+  .category-header {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 32px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .category-name {
+    font-family: 'Instrument Serif', Georgia, serif;
+    font-size: clamp(26px, 3.5vw, 38px);
+    font-weight: 400;
+    letter-spacing: -0.025em;
+  }
+
+  .category-count {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-muted);
+    font-feature-settings: 'tnum' 1;
+  }
+
+  .food-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+  }
+
+  /* FOOD CARD */
+  .food-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: border-color 0.25s var(--ease-smooth), transform 0.3s var(--ease-spring), box-shadow 0.3s;
+    cursor: pointer;
+    position: relative;
+  }
+  .food-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(232,160,32,0.4), transparent);
+    opacity: 0;
+    transition: opacity 0.25s;
+    z-index: 1;
+  }
+  .food-card:hover {
+    border-color: rgba(232,160,32,0.25);
+    transform: translateY(-6px);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(232,160,32,0.1);
+  }
+  .food-card:hover::before { opacity: 1; }
+
+  /* FEATURED CARD VARIANT */
+  .food-card.featured {
+    grid-column: span 2;
+    flex-direction: row;
+  }
+  @media (max-width: 640px) {
+    .food-card.featured { grid-column: span 1; flex-direction: column; }
+  }
+
+  .card-visual {
+    background: var(--bg-elevated);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 60px;
+    position: relative;
+    overflow: hidden;
+    min-height: 160px;
+    flex-shrink: 0;
+  }
+  .food-card.featured .card-visual {
+    width: 240px;
+    min-height: 100%;
+    font-size: 80px;
+  }
+  @media (max-width: 640px) {
+    .food-card.featured .card-visual { width: 100%; min-height: 160px; font-size: 60px; }
+  }
+
+  .card-visual::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center,
+      rgba(232,160,32,0.06) 0%, transparent 70%);
+  }
+
+  .card-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: var(--radius-pill);
+    z-index: 2;
+  }
+  .badge-hot { background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.3); color: #f87171; }
+  .badge-popular { background: rgba(232,160,32,0.12); border: 1px solid rgba(232,160,32,0.25); color: var(--accent); }
+  .badge-fasting { background: rgba(74,222,128,0.1); border: 1px solid rgba(74,222,128,0.22); color: #4ade80; }
+  .badge-new { background: rgba(168,85,247,0.1); border: 1px solid rgba(168,85,247,0.22); color: #c084fc; }
+
+  .card-body {
+    padding: 22px 22px 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .card-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 8px;
+  }
+
+  .card-name {
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    line-height: 1.3;
+    flex: 1;
+    padding-right: 12px;
+  }
+
+  .card-price {
+    font-family: 'Inter', monospace;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: -0.01em;
+    font-feature-settings: 'tnum' 1;
+    white-space: nowrap;
+  }
+
+  .card-desc {
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--text-muted);
+    flex: 1;
+    margin-bottom: 18px;
+  }
+
+  .card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 14px;
+    border-top: 1px solid var(--border-subtle);
+  }
+
+  .card-tags {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .card-tag {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: var(--text-muted);
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-pill);
+    padding: 3px 8px;
+    text-transform: uppercase;
+  }
+
+  .add-btn {
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+    background: var(--accent);
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #0a0a08;
+    transition: transform 0.2s var(--ease-spring), box-shadow 0.2s;
+  }
+  .add-btn:hover {
+    transform: scale(1.12);
+    box-shadow: 0 4px 16px rgba(232,160,32,0.4);
+  }
+  .add-btn svg { pointer-events: none; }
+
+  /* TOAST NOTIFICATION */
+  .toast {
+    position: fixed;
+    bottom: 28px;
+    left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-pill);
+    padding: 12px 20px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-primary);
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    transition: transform 0.4s var(--ease-spring), opacity 0.3s;
+    pointer-events: none;
+    opacity: 0;
+    white-space: nowrap;
+  }
+  .toast.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+
+  /* CART FAB */
+  .cart-fab {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    background: var(--accent);
+    color: #0a0a08;
+    border: none;
+    border-radius: var(--radius-pill);
+    padding: 14px 22px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 8px 32px rgba(232,160,32,0.35);
+    transition: transform 0.2s var(--ease-spring), box-shadow 0.2s;
+    text-decoration: none;
+    z-index: 90;
+    opacity: 0;
+    transform: translateY(20px);
+    pointer-events: none;
+    transition: opacity 0.3s, transform 0.3s var(--ease-spring), box-shadow 0.2s;
+  }
+  .cart-fab.visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+  .cart-fab:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(232,160,32,0.45);
+  }
+  .cart-count {
+    background: #0a0a08;
+    color: var(--accent);
+    border-radius: 50%;
+    width: 22px; height: 22px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700;
+    font-feature-settings: 'tnum' 1;
+  }
+
+  /* REVEAL */
+  .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s var(--ease-spring), transform 0.6s var(--ease-spring);
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border-subtle);
+    padding: 36px 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    position: relative;
+    z-index: 1;
+  }
+  .footer-brand { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 600; }
+  .footer-links { display: flex; gap: 24px; }
+  .footer-links a { font-size: 13px; color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--text-secondary); }
+
+  @media (max-width: 768px) {
+    nav { top: 12px; }
+    nav a { padding: 6px 12px; font-size: 12px; }
+    .filter-wrap { top: 60px; }
+    footer { flex-direction: column; text-align: center; }
+    .footer-links { justify-content: center; }
+    .food-grid { grid-template-columns: 1fr; }
+    .cart-fab { right: 16px; bottom: 16px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <img src="toran burger logo.svg" alt="Toran Burger" class="nav-logo">
+  <a href="index.html">Profile</a>
+  <a href="menu.html" class="active">Menu</a>
+  <a href="order.html">Order Now</a>
+</nav>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="page-eyebrow">
+    <svg width="8" height="8" viewBox="0 0 8 8" fill="none"><circle cx="4" cy="4" r="4" fill="#e8a020"/></svg>
+    Full Menu
+  </div>
+  <h1 class="page-title">Every Dish,<br><em style="font-style:italic; background: linear-gradient(135deg,#e8a020,#f5c842,#e8a020); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;">Every Craving</em></h1>
+  <p class="page-sub">From our legendary burgers to wood-fired pizzas and mega burritos — Toran has you covered.</p>
+</div>
+
+<!-- FILTER TABS -->
+<div class="filter-wrap">
+  <div class="filter-tabs">
+    <button class="filter-tab active" data-filter="all">All Items</button>
+    <button class="filter-tab" data-filter="burgers">🍔 Burgers</button>
+    <button class="filter-tab" data-filter="pizza">🍕 Pizza</button>
+    <button class="filter-tab" data-filter="burritos">🌯 Burritos</button>
+    <button class="filter-tab" data-filter="chicken">🍗 Chicken</button>
+    <button class="filter-tab" data-filter="drinks">🍹 Drinks</button>
+  </div>
+</div>
+
+<!-- MENU CONTENT -->
+<div class="menu-wrap">
+
+  <!-- BURGERS -->
+  <div class="category-section visible-cat" data-cat="burgers">
+    <div class="category-header">
+      <h2 class="category-name">Burgers</h2>
+      <span class="category-count">4 items</span>
+    </div>
+    <div class="food-grid">
+
+      <div class="food-card featured reveal" data-cat="burgers">
+        <div class="card-visual" style="background: linear-gradient(135deg, #1a140a, #241808);">
+          <span class="card-badge badge-popular">⭐ Most Popular</span>
+          👑
+        </div>
+        <div class="card-body">
+          <div class="card-meta">
+            <div class="card-name">King Size Special Burger</div>
+            <div class="card-price">500 ETB</div>
+          </div>
+          <p class="card-desc">Our crown jewel. A towering burger stacked with a premium double patty, caramelized onions, fresh tomato, crisp lettuce, pickles, and our secret Toran sauce. One bite and you'll understand the hype.</p>
+          <div class="card-footer">
+            <div class="card-tags">
+              <span class="card-tag">🔥 Signature</span>
+              <span class="card-tag">Extra Large</span>
+            </div>
+            <button class="add-btn" onclick="addToCart('King Size Special Burger', 500)">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M7 2v10M2 7h10"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="food-card reveal" data-cat="burgers">
+        <div class="card-visual" style="background: linear-gradient(135deg, #18120a, #1f1608);">
+          <span class="card-badge badge-hot">🔥 Hot Seller</span>
+          🍔
+        </div>
+        <div class="card-body">
+          <div class="card-meta">
+            <div class="card-name">Special Burger</div>
+            <div class="card-price">400 ETB</div>
+          </div>
+          <p class="card-desc">The classic Toran experience. Juicy beef patty, premium toppings, served with our house-blended sauce. The burger that started it all.</p>
+          <div class="card-footer">
+            <div class="card-tags"><span class="card-tag">Classic</span><span class="card-tag">Best Value</span></div>
+            <button class="add-btn" onclick="addToCart('Special Burger', 400)">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M7 2v10M2 7h10"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="food-card reveal" data-cat="burgers">
+        <div class="card-visual" style="background: linear-gradient(135deg, #0e1a0e, #121f12);">
+          <span class="card-badge badge-fasting">🌿 Fasting</span>
+          🌿🍔
+        </div>
+        <div class="card-body">
+          <div class="card-meta">
+            <div class="card-name">Fasting Burger</div>
+            <div class="card-price">300 ETB</div>
+          </div>
+          <p class="card-desc">Our plant-based masterpiece. A satisfying vegan patty with fresh garden vegetables and tahini-based sauce. Available year-round, perfect for fasting season.</p>
+          <div class="card-footer">
+            <div class="card-tags"><span class="card-tag">🌱 Vegan</span><span class="card-tag">Fasting OK</span></div>
+            <button class="add-btn" onclick="addToCart('Fasting Burger', 300)">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M7 2v10M2 7h10"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="food-card reveal" data-cat="burgers">
+        <div class="card-visual" style="background: linear-gradient(135deg, #18100a, #241608);">
+          🥗🍔
+        </div>
+        <div class="card-body">
+          <div class="card-meta">
+            <div class="card-name">Special Club</div>
+            <div class="card-price">380 ETB</div>
+          </div>
+          <p class="card-desc">Triple-layered club sandwich with grilled chicken, crispy bacon, fresh veggies and our signature house dressing. A true crowd-pleaser.</p>
+          <div class="card-footer">
+            <div class="card-tags"><span class="card-tag">Triple Stack</span></div>
+            <button class="add-btn" onclick="addToCart('Special Club', 380)">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M7 2v10M2 7h10"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PIZZA -->
+  <div class="category-section visible-cat" data-cat="pizza">
+    <div class="category-header">
+      <h2 class="category-name">Pizza</h2>
+      <span class="category-count">3 items</span>
+    </div>
+    <div class="food-grid">
+
+      <div class="food-card featured reveal" data-cat="pizza">
+        <div class="card-visual" style="background: linear-gradient(135deg, #1a0e08, #241208);">
+          <span class="card-badge badge-popular">⭐ Top Pick</span>
+          🍕
+        </div>
+        <div class="card-body">
+          <div class="card-meta">
+            <div class="card-name">Special Pizza</div>
+            <div class="card-price">480 ETB</div>
+          </div>
+          <p class="card-desc">Adama's most talked-about pizza. Loaded with premium toppings on a hand-stretched base, baked to golden perfection. Features mozzarella, mixed peppers, onions, olives, and choice of protein. Massive and shareable.</p>
+          <div class="card-footer">
+            <div class="card-tags"><span class="card-tag">🔥 Fan Fave</span><span class="card-tag">Large</span></div>
+            <button class="add-btn" onclick="addToCart('Special Pizza', 480)">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M7 2v10M2 7h10"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="food-card reveal" data-cat="pizza">
+        <div class="card-visual" style="background: linear-gradient(135deg, #1a0808, #200e0e);">
+          <span class="card-badge badge-hot">🍗 Chicken</span>
+          🍗🍕
+        </div>
+        <div class="card-body">
+          <div class="card-meta">
+            <div class="card-name">Chicken Pizza</div>
+            <div class="card-price">450 ETB</div>
+          </div>
+          <p class="card-desc">Generous shredded chicken, creamy mozzarella and spiced tomato base. The go-to for chicken lovers — crispy edges, soft center.</p>
+          <div class="card-footer">
+            <div class="card-tags"><span class="card-tag">Chicken</span></div>
+            <button class="add-btn" onclick="addToCart('Chicken Pizza', 450)">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M7 2v10M2 7h10"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="food-card reveal" data-cat="pizza">
+        <div class="card-visual" style="background: linear-gradient(135deg, #0e1218, #101820);">
+          <span class="card-badge badge-new">✨ New</span>
+          🍂🍕
+        </div>
+        <div class="card-body">
+          <div class="card-meta">
+            <div class="card-name">4 Season Pizza</div>
+            <div class="card-price">500 ETB</div>
+          </div>
+          <p class="card-desc">Four distinct flavors in four quadrants. Ham & mushroom, pepperoni, vegetarian, and BBQ chicken — one pizza, four experiences.</p>
+          <div class="card-footer">
+            <div class="card-tags"><span class="card-tag">4-in-1</span><span class="card-tag">Large</span></div>
+            <button class="add-btn" onclick="addToCart('4 Season Pizza', 500)">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M7 2v10M2 7h10"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- BURRITOS -->
+  <div class="category-section visible-cat" data-cat="burritos">
+    <div class="category-header">
+      <h2 class="category-name">Burritos</h2>
+      <span class="category-count">3 items</span>
+    </div>
+    <div class="food-grid">
+
+      <div class="food-card featured reveal" data-cat="burritos">
+        <div class="card-visual" style="background: linear-gradient(135deg, #1a1208, #24180a);">
+          <span class="card-badge badge-popular">💥 Massive</span>
+          🌯
+        </div>
+        <div class="card-body">
+          <div class="card-meta">
+            <div class="card-name">Burrito</div>
+            <div class="card-price">600 ETB</div>
+          </div>
+          <p class="card-desc">Toran's showstopper. A massive flour tortilla wrapped around seasoned rice, black beans, grilled protein, pico de gallo, guacamole, and sour cream. So big it comes with a warning. A local legend in Adama.</p>
+          <div class="card-footer">
+            <div class="card-tags"><span class="card-tag">🌶️ Spicy Option</span><span class="card-tag">XXL</span></div>
+            <button class="add-btn" onclick="addToCart('Burrito', 600)">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M7 2v10M2 7h10"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="food-card reveal" data-cat="burritos">
+        <div class="card-visual" style="background: linear-gradient(135deg, #0e1a0e, #121f12);">
+          <span class="card-badge badge-fasting">🌿 Tsom</span>
+          🌱🌯
+        </div>
+        <div class="card-body">
+          <div class="card-meta">
+            <div class="card-name">Tsom Burrito</div>
+            <div class="card-price">400 ETB</div>
+          </div>
+          <p class="card-desc">Ethiopian fasting-style burrito. Packed with lentils, roasted vegetables, shiro, and spiced tomatoes. Entirely plant-based and deeply flavorful.</p>
+          <div class="card-footer">
+            <div class="card-tags"><span class="card-tag">🌱 Vegan</span><span class="card-tag">Fasting</span></div>
+            <button class="add-btn" onclick="addToCart('Tsom Burrito', 400)">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M7 2v10M2 7h10"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="food-card reveal" data-cat="burritos">
+        <div class="card-visual" style="background: linear-gradient(135deg, #18100e, #241608);">
+          🌶️🌯
+        </div>
+        <div class="card-body">
+          <div class="card-meta">
+            <div class="card-name">Chicken Wrap</div>
+            <div class="card-price">350 ETB</div>
+          </div>
+          <p class="card-desc">Grilled chicken strips, fresh greens, tomato, cucumber and creamy garlic sauce folded in a warm tortilla. Light, fast, and delicious.</p>
+          <div class="card-footer">
+            <div class="card-tags"><span class="card-tag">Quick Bite</span><span class="card-tag">Grilled</span></div>
+            <button class="add-btn" onclick="addToCart('Chicken Wrap', 350)">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M7 2v10M2 7h10"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- CHICKEN -->
+  <div class="category-section visible-cat" data-cat="chicken">
+    <div class="category-header">
+      <h2 class="category-name">Chicken</h2>
+      <span class="category-count">2 items</span>
+    </div>
+    <div class="food-grid">
+
+      <div class="food-card featured reveal" data-cat="chicken">
+        <div class="card-visual" style="background: linear-gradient(135deg, #1a0e06, #241406);">
+          <span class="card-badge badge-hot">🔥 Crispy</span>
+          🍗
+        </div>
+        <div class="card-body">
+          <div class="card-meta">
+            <div class="card-name">KFC Fried Chicken</div>
+            <div class="card-price">440 ETB</div>
+          </div>
+          <p class="card-desc">Eleven secret spices, pressure-fried to crispy perfection. The juiciest fried chicken in Adama. Our recipe is closely guarded — and for good reason. Served with fries and dipping sauce.</p>
+          <div class="card-footer">
+            <div class="card-tags"><span class="card-tag">🔥 Crispy</span><span class="card-tag">+ Fries</span></div>
+            <button class="add-btn" onclick="addToCart('KFC Fried Chicken', 440)">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M7 2v10M2 7h10"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="food-card reveal" data-cat="chicken">
+        <div class="card-visual" style="background: linear-gradient(135deg, #1a100a, #241808);">
+          🦵
+        </div>
+        <div class="card-body">
+          <div class="card-meta">
+            <div class="card-name">Chicken Leg</div>
+            <div class="card-price">420 ETB</div>
+          </div>
+          <p class="card-desc">A big, meaty chicken leg marinated overnight in Toran's special blend of spices and herbs, then fried golden. Fall-off-the-bone tender.</p>
+          <div class="card-footer">
+            <div class="card-tags"><span class="card-tag">Marinated</span><span class="card-tag">Juicy</span></div>
+            <button class="add-btn" onclick="addToCart('Chicken Leg', 420)">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M7 2v10M2 7h10"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- DRINKS -->
+  <div class="category-section visible-cat" data-cat="drinks">
+    <div class="category-header">
+      <h2 class="category-name">Drinks</h2>
+      <span class="category-count">3 items</span>
+    </div>
+    <div class="food-grid">
+
+      <div class="food-card reveal" data-cat="drinks">
+        <div class="card-visual" style="background: linear-gradient(135deg, #1a0a10, #240e18);">
+          <span class="card-badge badge-popular">❤️ Fave</span>
+          🍓🍹
+        </div>
+        <div class="card-body">
+          <div class="card-meta">
+            <div class="card-name">Strawberry Mojito</div>
+            <div class="card-price">150 ETB</div>
+          </div>
+          <p class="card-desc">Fresh strawberries muddled with mint, lime juice, and sparkling water. Sweet, tangy, and perfectly refreshing.</p>
+          <div class="card-footer">
+            <div class="card-tags"><span class="card-tag">Non-Alcoholic</span><span class="card-tag">Refreshing</span></div>
+            <button class="add-btn" onclick="addToCart('Strawberry Mojito', 150)">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M7 2v10M2 7h10"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="food-card reveal" data-cat="drinks">
+        <div class="card-visual" style="background: linear-gradient(135deg, #181a08, #1e2008);">
+          🍍🍹
+        </div>
+        <div class="card-body">
+          <div class="card-meta">
+            <div class="card-name">Pineapple Mojito</div>
+            <div class="card-price">150 ETB</div>
+          </div>
+          <p class="card-desc">Tropical pineapple chunks with fresh mint, lime, and fizzy water. A vacation in a glass — light, zippy, and ice cold.</p>
+          <div class="card-footer">
+            <div class="card-tags"><span class="card-tag">Non-Alcoholic</span><span class="card-tag">Tropical</span></div>
+            <button class="add-btn" onclick="addToCart('Pineapple Mojito', 150)">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M7 2v10M2 7h10"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="food-card reveal" data-cat="drinks">
+        <div class="card-visual" style="background: linear-gradient(135deg, #1a1208, #241808);">
+          <span class="card-badge badge-new">✨ Exclusive</span>
+          ⭐🍹
+        </div>
+        <div class="card-body">
+          <div class="card-meta">
+            <div class="card-name">Toran Special</div>
+            <div class="card-price">190 ETB</div>
+          </div>
+          <p class="card-desc">Our secret recipe house blend. A layered drink that changes with every sip — fruity, refreshing, and exclusively ours. Nobody else makes this in Adama.</p>
+          <div class="card-footer">
+            <div class="card-tags"><span class="card-tag">🔒 Secret Recipe</span><span class="card-tag">Exclusive</span></div>
+            <button class="add-btn" onclick="addToCart('Toran Special', 190)">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M7 2v10M2 7h10"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<!-- CART FAB -->
+<a href="order.html" class="cart-fab" id="cartFab">
+  <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="15" r="1.5"/><circle cx="13" cy="15" r="1.5"/><path d="M1 1.5h2.5l2 8.5h8l2-6H5"/></svg>
+  View Order
+  <span class="cart-count" id="cartCount">0</span>
+</a>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">
+    <img src="toran burger logo.svg" alt="Toran Burger" style="width:28px;height:28px;object-fit:contain;">
+    Toran Burger
+  </div>
+  <div class="footer-links">
+    <a href="index.html">Profile</a>
+    <a href="menu.html">Menu</a>
+    <a href="order.html">Order</a>
+  </div>
+  <p style="font-size:12px;color:var(--text-muted);">© 2026 Toran Burger. Adama, Ethiopia.</p>
+</footer>
+
+<script>
+  // Reveal
+  const obs = new IntersectionObserver(
+    entries => entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } }),
+    { threshold: 0.06, rootMargin: '0px 0px -40px 0px' }
+  );
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+  // Filter tabs
+  const tabs = document.querySelectorAll('.filter-tab');
+  const sections = document.querySelectorAll('.category-section');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      const filter = tab.dataset.filter;
+      sections.forEach(sec => {
+        if (filter === 'all' || sec.dataset.cat === filter) {
+          sec.classList.add('visible-cat');
+        } else {
+          sec.classList.remove('visible-cat');
+        }
+      });
+    });
+  });
+
+  // Cart
+  let cartCount = 0;
+  const cartFab = document.getElementById('cartFab');
+  const cartCountEl = document.getElementById('cartCount');
+  const toast = document.getElementById('toast');
+  let toastTimer;
+
+  function addToCart(name, price) {
+    cartCount++;
+    cartCountEl.textContent = cartCount;
+    cartFab.classList.add('visible');
+
+    clearTimeout(toastTimer);
+    toast.innerHTML = `<span>✓</span> ${name} added — ${price} ETB`;
+    toast.classList.add('show');
+    toastTimer = setTimeout(() => toast.classList.remove('show'), 2500);
+
+    // Store in sessionStorage for order page
+    try {
+      const items = JSON.parse(sessionStorage.getItem('toranCart') || '[]');
+      const existing = items.find(i => i.name === name);
+      if (existing) existing.qty++;
+      else items.push({ name, price, qty: 1 });
+      sessionStorage.setItem('toranCart', JSON.stringify(items));
+    } catch(e) {}
+  }
+
+  // Init cart count from session
+  try {
+    const items = JSON.parse(sessionStorage.getItem('toranCart') || '[]');
+    cartCount = items.reduce((acc, i) => acc + i.qty, 0);
+    if (cartCount > 0) {
+      cartCountEl.textContent = cartCount;
+      cartFab.classList.add('visible');
+    }
+  } catch(e) {}
+</script>
+
+</body>
+</html>
