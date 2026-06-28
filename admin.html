@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin — Toran Burger Orders</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="public/css/styles.css">
+  <style>
+    /* ===== ADMIN SPECIFIC ===== */
+    .admin-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 40px 24px;
+    }
+
+    .admin-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-bottom: 40px;
+      border-bottom: 1px solid rgba(26, 26, 24, 0.06);
+      padding-bottom: 24px;
+    }
+
+    .admin-title {
+      font-family: 'Instrument Serif', serif;
+      font-size: 2rem;
+      font-weight: 400;
+      color: #1a1a18;
+    }
+
+    .admin-stats {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .stat-badge {
+      background: #f8f7f5;
+      border-radius: 20px;
+      padding: 10px 20px;
+      text-align: center;
+      min-width: 120px;
+    }
+
+    .stat-badge-num {
+      font-size: 1.6rem;
+      font-weight: 600;
+      color: #d4941e;
+      display: block;
+    }
+
+    .stat-badge-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: rgba(26, 26, 24, 0.45);
+      margin-top: 2px;
+    }
+
+    /* FILTERS */
+    .admin-filters {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 28px;
+      padding: 16px 20px;
+      background: #f8f7f5;
+      border-radius: 20px;
+    }
+
+    .filter-btn {
+      background: #ffffff;
+      border: 1px solid rgba(26, 26, 24, 0.12);
+      color: rgba(26, 26, 24, 0.72);
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: 0.2s;
+      text-transform: capitalize;
+    }
+
+    .filter-btn.active {
+      background: #1a1a18;
+      color: #ffffff;
+      border-color: #1a1a18;
+    }
+
+    .filter-btn:hover {
+      background: #1a1a18;
+      color: #ffffff;
+      border-color: #1a1a18;
+    }
+
+    /* ORDERS GRID */
+    .orders-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+      gap: 20px;
+    }
+
+    .order-card {
+      background: #ffffff;
+      border: 1px solid rgba(26, 26, 24, 0.06);
+      border-radius: 24px;
+      padding: 24px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+      transition: 0.3s;
+    }
+
+    .order-card:hover {
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+      border-color: rgba(26, 26, 24, 0.12);
+    }
+
+    .order-card-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 16px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(26, 26, 24, 0.06);
+    }
+
+    .order-id {
+      font-weight: 600;
+      font-size: 1.1rem;
+      color: #1a1a18;
+      letter-spacing: 0.5px;
+    }
+
+    .order-status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+    }
+
+    .order-status-badge.pending {
+      background: #fff3e0;
+      color: #e8a020;
+    }
+
+    .order-status-badge.preparing {
+      background: #e3f2fd;
+      color: #1976d2;
+    }
+
+    .order-status-badge.ready {
+      background: #e8f5e9;
+      color: #388e3c;
+    }
+
+    .order-status-badge.completed {
+      background: #f3e5f5;
+      color: #7b1fa2;
+    }
+
+    .order-info {
+      display: grid;
+      gap: 12px;
+      margin-bottom: 16px;
+      font-size: 0.9rem;
+      color: rgba(26, 26, 24, 0.72);
+    }
+
+    .order-info-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .order-info-label {
+      font-weight: 500;
+      color: #1a1a18;
+    }
+
+    .order-items {
+      background: #f8f7f5;
+      border-radius: 16px;
+      padding: 12px;
+      margin-bottom: 16px;
+      font-size: 0.85rem;
+      color: #1a1a18;
+      line-height: 1.5;
+    }
+
+    .order-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .order-item-qty {
+      background: #ffffff;
+      padding: 2px 8px;
+      border-radius: 8px;
+      font-weight: 600;
+      color: #d4941e;
+      min-width: 24px;
+      text-align: center;
+    }
+
+    .order-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 16px;
+      border-top: 1px solid rgba(26, 26, 24, 0.06);
+      margin-bottom: 16px;
+    }
+
+    .order-total {
+      font-weight: 600;
+      color: #1a1a18;
+      font-size: 1rem;
+    }
+
+    .order-total-label {
+      font-size: 0.75rem;
+      color: rgba(26, 26, 24, 0.45);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .order-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .action-btn {
+      flex: 1;
+      background: #1a1a18;
+      color: #ffffff;
+      border: none;
+      padding: 10px 12px;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s;
+      text-transform: capitalize;
+    }
+
+    .action-btn:hover {
+      background: #d4941e;
+    }
+
+    .action-btn.secondary {
+      background: #f8f7f5;
+      color: #1a1a18;
+      border: 1px solid rgba(26, 26, 24, 0.12);
+    }
+
+    .action-btn.secondary:hover {
+      background: #1a1a18;
+      color: #ffffff;
+      border-color: #1a1a18;
+    }
+
+    /* EMPTY STATE */
+    .empty-state {
+      text-align: center;
+      padding: 60px 40px;
+      background: #f8f7f5;
+      border-radius: 24px;
+    }
+
+    .empty-icon {
+      font-size: 3rem;
+      margin-bottom: 16px;
+    }
+
+    .empty-title {
+      font-weight: 600;
+      font-size: 1.2rem;
+      color: #1a1a18;
+      margin-bottom: 6px;
+    }
+
+    .empty-text {
+      color: rgba(26, 26, 24, 0.72);
+    }
+
+    /* MODAL */
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(26, 26, 24, 0.5);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 24px;
+    }
+
+    .modal.visible {
+      display: flex;
+    }
+
+    .modal-content {
+      background: #ffffff;
+      border-radius: 40px;
+      padding: 40px;
+      max-width: 500px;
+      width: 100%;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+      animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .modal-title {
+      font-family: 'Instrument Serif', serif;
+      font-size: 1.6rem;
+      font-weight: 400;
+      margin-bottom: 20px;
+      color: #1a1a18;
+    }
+
+    .modal-detail {
+      display: grid;
+      gap: 16px;
+      margin-bottom: 24px;
+      font-size: 0.9rem;
+    }
+
+    .modal-detail-row {
+      display: flex;
+      justify-content: space-between;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(26, 26, 24, 0.06);
+    }
+
+    .modal-detail-label {
+      font-weight: 500;
+      color: #1a1a18;
+    }
+
+    .modal-detail-value {
+      color: rgba(26, 26, 24, 0.72);
+    }
+
+    .modal-items {
+      background: #f8f7f5;
+      border-radius: 20px;
+      padding: 16px;
+      margin-bottom: 24px;
+    }
+
+    .modal-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      font-size: 0.9rem;
+    }
+
+    .modal-item:not(:last-child) {
+      border-bottom: 1px solid rgba(26, 26, 24, 0.06);
+      margin-bottom: 8px;
+      padding-bottom: 8px;
+    }
+
+    .modal-item-qty {
+      background: #ffffff;
+      padding: 2px 8px;
+      border-radius: 8px;
+      font-weight: 600;
+      color: #d4941e;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 12px;
+    }
+
+    .modal-actions button {
+      flex: 1;
+      padding: 12px 16px;
+      border-radius: 16px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .modal-actions .btn-primary {
+      background: #1a1a18;
+      color: #ffffff;
+    }
+
+    .modal-actions .btn-primary:hover {
+      background: #d4941e;
+    }
+
+    .modal-actions .btn-close {
+      background: #f8f7f5;
+      color: #1a1a18;
+      border: 1px solid rgba(26, 26, 24, 0.12);
+    }
+
+    .modal-actions .btn-close:hover {
+      background: #1a1a18;
+      color: #ffffff;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      .orders-grid {
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      }
+
+      .admin-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .admin-container {
+        padding: 24px 16px;
+      }
+
+      .admin-title {
+        font-size: 1.6rem;
+      }
+
+      .orders-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .admin-filters {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .modal-content {
+        padding: 28px 20px;
+        border-radius: 24px;
+      }
+
+      .modal-title {
+        font-size: 1.3rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- NAV -->
+  <nav>
+    <img src="public/images/logos/toran burger logo.svg" alt="Toran Burger" class="nav-logo">
+    <a href="admin.html" class="active">Orders</a>
+    <a href="admin-analytics.html">Analytics</a>
+    <a href="admin-menu.html">Menu</a>
+  </nav>
+
+  <!-- ADMIN CONTAINER -->
+  <div class="admin-container">
+    <!-- HEADER -->
+    <div class="admin-header">
+      <h1 class="admin-title">📋 Orders Dashboard</h1>
+      <div class="admin-stats">
+        <div class="stat-badge">
+          <span class="stat-badge-num" id="totalOrders">0</span>
+          <span class="stat-badge-label">Total</span>
+        </div>
+        <div class="stat-badge">
+          <span class="stat-badge-num" id="pendingOrders">0</span>
+          <span class="stat-badge-label">Pending</span>
+        </div>
+        <div class="stat-badge">
+          <span class="stat-badge-num" id="preparingOrders">0</span>
+          <span class="stat-badge-label">Preparing</span>
+        </div>
+        <div class="stat-badge">
+          <span class="stat-badge-num" id="readyOrders">0</span>
+          <span class="stat-badge-label">Ready</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- FILTERS -->
+    <div class="admin-filters">
+      <button class="filter-btn active" data-filter="all" onclick="filterOrders(this)">All Orders</button>
+      <button class="filter-btn" data-filter="pending" onclick="filterOrders(this)">🔔 Pending</button>
+      <button class="filter-btn" data-filter="preparing" onclick="filterOrders(this)">👨‍🍳 Preparing</button>
+      <button class="filter-btn" data-filter="ready" onclick="filterOrders(this)">✅ Ready</button>
+      <button class="filter-btn" data-filter="completed" onclick="filterOrders(this)">🎉 Completed</button>
+    </div>
+
+    <!-- ORDERS GRID -->
+    <div class="orders-grid" id="ordersGrid">
+      <!-- Orders will be rendered here by JavaScript -->
+    </div>
+
+    <!-- EMPTY STATE -->
+    <div class="empty-state" id="emptyState" style="display:none;">
+      <div class="empty-icon">📭</div>
+      <div class="empty-title">No Orders</div>
+      <div class="empty-text">No orders match the current filter. Check back soon!</div>
+    </div>
+  </div>
+
+  <!-- ORDER DETAIL MODAL -->
+  <div class="modal" id="orderModal">
+    <div class="modal-content">
+      <h2 class="modal-title" id="modalOrderId">Order #TB-0000</h2>
+      <div class="modal-detail">
+        <div class="modal-detail-row">
+          <span class="modal-detail-label">Customer</span>
+          <span class="modal-detail-value" id="modalCustomer">—</span>
+        </div>
+        <div class="modal-detail-row">
+          <span class="modal-detail-label">Phone</span>
+          <span class="modal-detail-value" id="modalPhone">—</span>
+        </div>
+        <div class="modal-detail-row">
+          <span class="modal-detail-label">Type</span>
+          <span class="modal-detail-value" id="modalType">—</span>
+        </div>
+        <div class="modal-detail-row">
+          <span class="modal-detail-label">Time</span>
+          <span class="modal-detail-value" id="modalTime">—</span>
+        </div>
+      </div>
+
+      <div class="modal-title" style="font-size:1rem;margin:24px 0 12px;font-family:Inter,sans-serif;font-weight:600;">Items</div>
+      <div class="modal-items" id="modalItems">
+        <!-- Items will be inserted here -->
+      </div>
+
+      <div class="modal-detail-row" style="border:none;padding:0;margin-bottom:24px;">
+        <span class="modal-detail-label">Total</span>
+        <span class="modal-detail-value" style="font-weight:600;color:#1a1a18;font-size:1.1rem;" id="modalTotal">—</span>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn-primary" id="modalActionBtn" onclick="handleOrderAction()">Mark as Preparing</button>
+        <button class="btn-close" onclick="closeOrderModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer style="margin-top:60px;">
+    <div class="footer-brand">
+      <img src="public/images/logos/toran burger logo.svg" alt="Toran Burger" style="width:28px;height:28px;object-fit:contain;">
+      Toran Burger Admin
+    </div>
+    <div class="footer-links">
+      <a href="admin.html">Orders</a>
+      <a href="admin-analytics.html">Analytics</a>
+      <a href="admin-menu.html">Menu</a>
+    </div>
+  </footer>
+
+  <script>
+    // SAMPLE ORDERS DATA
+    const SAMPLE_ORDERS = [
+      {
+        id: 'TB-2024',
+        customer: 'John Doe',
+        phone: '+251911234567',
+        type: 'pickup',
+        status: 'pending',
+        time: new Date(Date.now() - 5 * 60000), // 5 mins ago
+        items: [
+          { name: 'King Size Special', qty: 2, price: 400 },
+          { name: 'Beef Burger', qty: 1, price: 200 }
+        ],
+        total: 1000,
+        location: 'Batu Tower'
+      },
+      {
+        id: 'TB-2023',
+        customer: 'Abebe Kebede',
+        phone: '+251922345678',
+        type: 'delivery',
+        status: 'preparing',
+        time: new Date(Date.now() - 12 * 60000), // 12 mins ago
+        items: [
+          { name: 'Chicken Burger', qty: 3, price: 180 },
+          { name: 'Combo Meal', qty: 1, price: 350 }
+        ],
+        total: 890,
+        location: 'Franko, near hospital'
+      },
+      {
+        id: 'TB-2022',
+        customer: 'Sara Ahmed',
+        phone: '+251933456789',
+        type: 'dinein',
+        status: 'ready',
+        time: new Date(Date.now() - 25 * 60000), // 25 mins ago
+        items: [
+          { name: 'Veggie Burger', qty: 2, price: 150 },
+          { name: 'Fries', qty: 2, price: 60 }
+        ],
+        total: 420,
+        table: 5
+      },
+      {
+        id: 'TB-2021',
+        customer: 'Yonas Tekle',
+        phone: '+251944567890',
+        type: 'pickup',
+        status: 'preparing',
+        time: new Date(Date.now() - 8 * 60000), // 8 mins ago
+        items: [
+          { name: 'King Size Special', qty: 1, price: 400 },
+          { name: 'Beverage', qty: 2, price: 80 }
+        ],
+        total: 560,
+        location: 'Batu Tower'
+      },
+      {
+        id: 'TB-2020',
+        customer: 'Marta Lemma',
+        phone: '+251955678901',
+        type: 'delivery',
+        status: 'completed',
+        time: new Date(Date.now() - 45 * 60000), // 45 mins ago
+        items: [
+          { name: 'Beef Burger', qty: 2, price: 200 },
+          { name: 'Fries', qty: 1, price: 60 }
+        ],
+        total: 460,
+        location: 'Adama University campus'
+      }
+    ];
+
+    let allOrders = [...SAMPLE_ORDERS];
+    let currentFilter = 'all';
+    let selectedOrder = null;
+
+    function initAdmin() {
+      renderOrders();
+      updateStats();
+    }
+
+    function renderOrders() {
+      const grid = document.getElementById('ordersGrid');
+      const empty = document.getElementById('emptyState');
+
+      let filtered = currentFilter === 'all' 
+        ? allOrders 
+        : allOrders.filter(o => o.status === currentFilter);
+
+      if (filtered.length === 0) {
+        grid.style.display = 'none';
+        empty.style.display = 'block';
+        return;
+      }
+
+      grid.style.display = 'grid';
+      empty.style.display = 'none';
+
+      grid.innerHTML = filtered.map(order => `
+        <div class="order-card">
+          <div class="order-card-head">
+            <div class="order-id">${order.id}</div>
+            <div class="order-status-badge ${order.status}">
+              ${getStatusEmoji(order.status)} ${order.status}
+            </div>
+          </div>
+          <div class="order-info">
+            <div class="order-info-row">
+              <span class="order-info-label">👤 Customer</span>
+              <span>${order.customer}</span>
+            </div>
+            <div class="order-info-row">
+              <span class="order-info-label">📍 Location</span>
+              <span>${getLocationLabel(order)}</span>
+            </div>
+            <div class="order-info-row">
+              <span class="order-info-label">⏰ Time</span>
+              <span>${getTimeAgo(order.time)}</span>
+            </div>
+          </div>
+          <div class="order-items">
+            ${order.items.map(item => `
+              <div class="order-item">
+                <span>${item.name}</span>
+                <span class="order-item-qty">×${item.qty}</span>
+              </div>
+            `).join('')}
+          </div>
+          <div class="order-footer">
+            <div>
+              <div class="order-total-label">Total</div>
+              <div class="order-total">${order.total} ETB</div>
+            </div>
+            <div class="order-actions">
+              <button class="action-btn" onclick="openOrderModal('${order.id}')">View</button>
+              <button class="action-btn secondary" onclick="updateOrderStatus('${order.id}')">Update</button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function getStatusEmoji(status) {
+      const emojis = {
+        pending: '🔔',
+        preparing: '👨‍🍳',
+        ready: '✅',
+        completed: '🎉'
+      };
+      return emojis[status] || '📋';
+    }
+
+    function getLocationLabel(order) {
+      if (order.type === 'dinein') return `Table ${order.table}`;
+      if (order.type === 'pickup') return 'Pickup';
+      return order.location;
+    }
+
+    function getTimeAgo(time) {
+      const now = new Date();
+      const diff = Math.floor((now - time) / 60000); // minutes
+      if (diff < 1) return 'now';
+      if (diff < 60) return `${diff}m ago`;
+      return `${Math.floor(diff / 60)}h ago`;
+    }
+
+    function filterOrders(btn) {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentFilter = btn.dataset.filter;
+      renderOrders();
+    }
+
+    function openOrderModal(orderId) {
+      selectedOrder = allOrders.find(o => o.id === orderId);
+      if (!selectedOrder) return;
+
+      document.getElementById('modalOrderId').textContent = selectedOrder.id;
+      document.getElementById('modalCustomer').textContent = selectedOrder.customer;
+      document.getElementById('modalPhone').textContent = selectedOrder.phone;
+      document.getElementById('modalType').textContent = selectedOrder.type.charAt(0).toUpperCase() + selectedOrder.type.slice(1);
+      document.getElementById('modalTime').textContent = getTimeAgo(selectedOrder.time);
+
+      const itemsHTML = selectedOrder.items.map(item => `
+        <div class="modal-item">
+          <span>${item.name} <span class="modal-item-qty">×${item.qty}</span></span>
+          <span>${item.price * item.qty} ETB</span>
+        </div>
+      `).join('');
+      document.getElementById('modalItems').innerHTML = itemsHTML;
+
+      document.getElementById('modalTotal').textContent = selectedOrder.total + ' ETB';
+
+      // Update action button based on current status
+      const actionBtn = document.getElementById('modalActionBtn');
+      const statusFlow = { pending: 'preparing', preparing: 'ready', ready: 'completed', completed: 'completed' };
+      const nextStatus = statusFlow[selectedOrder.status];
+      const actionTexts = {
+        preparing: 'Mark as Preparing',
+        ready: 'Mark as Ready',
+        completed: 'Mark as Completed',
+      };
+      actionBtn.textContent = actionTexts[nextStatus] || 'Update Status';
+
+      document.getElementById('orderModal').classList.add('visible');
+    }
+
+    function closeOrderModal() {
+      document.getElementById('orderModal').classList.remove('visible');
+      selectedOrder = null;
+    }
+
+    function handleOrderAction() {
+      if (!selectedOrder) return;
+      const statusFlow = { pending: 'preparing', preparing: 'ready', ready: 'completed', completed: 'completed' };
+      const nextStatus = statusFlow[selectedOrder.status];
+      
+      updateOrderStatusInternal(selectedOrder.id, nextStatus);
+      closeOrderModal();
+    }
+
+    function updateOrderStatus(orderId) {
+      selectedOrder = allOrders.find(o => o.id === orderId);
+      if (!selectedOrder) return;
+      
+      const statusFlow = { pending: 'preparing', preparing: 'ready', ready: 'completed', completed: 'completed' };
+      const nextStatus = statusFlow[selectedOrder.status];
+      updateOrderStatusInternal(orderId, nextStatus);
+    }
+
+    function updateOrderStatusInternal(orderId, newStatus) {
+      const order = allOrders.find(o => o.id === orderId);
+      if (order && order.status !== 'completed') {
+        order.status = newStatus;
+        renderOrders();
+        updateStats();
+      }
+    }
+
+    function updateStats() {
+      const total = allOrders.length;
+      const pending = allOrders.filter(o => o.status === 'pending').length;
+      const preparing = allOrders.filter(o => o.status === 'preparing').length;
+      const ready = allOrders.filter(o => o.status === 'ready').length;
+
+      document.getElementById('totalOrders').textContent = total;
+      document.getElementById('pendingOrders').textContent = pending;
+      document.getElementById('preparingOrders').textContent = preparing;
+      document.getElementById('readyOrders').textContent = ready;
+    }
+
+    // Close modal when clicking outside
+    document.getElementById('orderModal')?.addEventListener('click', function(e) {
+      if (e.target === this) closeOrderModal();
+    });
+
+    // Initialize on load
+    window.addEventListener('load', initAdmin);
+  </script>
+</body>
+</html>

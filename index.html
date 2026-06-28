@@ -1,714 +1,635 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Toran Burger — Adama, Ethiopia</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
-<style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Toran Burger — Adama, Ethiopia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+  <style>
+    /* ===== RESET & BASE ===== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #ffffff;
+      color: #1a1a18;
+      line-height: 1.5;
+      padding: 0 24px;
+    }
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+    img {
+      display: block;
+      max-width: 100%;
+    }
+    .section {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 72px 0 48px;
+    }
+    .section-tag {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #d4941e;
+      margin-bottom: 6px;
+    }
+    .section-title {
+      font-family: 'Instrument Serif', serif;
+      font-size: clamp(32px, 4.5vw, 54px);
+      font-weight: 400;
+      line-height: 1.1;
+      margin-bottom: 28px;
+    }
 
-  :root {
-    --bg-base: #faf7f2;
-    --bg-card: ##c2410c;
-    --bg-elevated: #181815;
-    --bg-hover: #1e1e1a;
-    --text-primary: #e2290c;
-    --text-secondary: rgba(255, 162, 1, 0.866);
-    --text-muted: rgba(0, 0, 0, 0.38);
-    --border-subtle: rgba(245,240,232,0.06);
-    --border-default: rgba(245,240,232,0.10);
-    --border-hover: rgba(245,240,232,0.18);
-    --accent: #e8a020;
-    --accent-deep: #c4751a;
-    --accent-glow: rgba(232,160,32,0.18);
-    --radius-lg: 16px;
-    --radius-xl: 20px;
-    --radius-pill: 9999px;
-    --ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
-    --ease-smooth: cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  }
+    /* ===== REVEAL ===== */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
 
-  html { scroll-behavior: smooth; }
+    /* ===== NAV ===== */
+    nav {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px 0;
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      flex-wrap: wrap;
+      border-bottom: 1px solid rgba(26, 26, 24, 0.06);
+    }
+    .nav-logo {
+      height: 44px;
+      width: auto;
+      margin-right: auto;
+    }
+    nav a {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: rgba(26, 26, 24, 0.72);
+      padding: 6px 0;
+      border-bottom: 2px solid transparent;
+      transition: 0.2s;
+    }
+    nav a.active {
+      border-bottom-color: #d4941e;
+      color: #1a1a18;
+    }
+    nav a:hover {
+      border-bottom-color: #d4941e;
+    }
 
-  body {
-    font-family: 'Inter', system-ui, sans-serif;
-    background: var(--bg-base);
-    color: var(--text-primary);
-    -webkit-font-smoothing: antialiased;
-    overflow-x: hidden;
-  }
+    /* ===== HERO ===== */
+    .hero {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 60px 0 40px;
+      text-align: center;
+    }
+    .hero-logo {
+      height: 250px;
+      width: auto;
+      margin: 0 auto 4px;
+    }
+    .hero h1 {
+      font-family: 'Instrument Serif', serif;
+      font-size: clamp(44px, 8vw, 88px);
+      font-weight: 400;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      max-width: 800px;
+      margin: 0 auto 16px;
+    }
+    .hero h1 em {
+      font-style: italic;
+      color: #d4941e;
+    }
+    .hero-sub {
+      font-size: 1.15rem;
+      color: rgba(26, 26, 24, 0.72);
+      max-width: 600px;
+      margin: 0 auto 32px;
+      font-weight: 300;
+      line-height: 1.6;
+    }
+    .hero-ctas {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 48px;
+    }
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: #1a1a18;
+      color: #ffffff;
+      padding: 14px 32px;
+      border-radius: 60px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: 0.25s;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .btn-primary:hover {
+      background: #d4941e;
+      transform: scale(1.02);
+    }
+    .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: transparent;
+      color: #1a1a18;
+      padding: 14px 32px;
+      border-radius: 60px;
+      font-weight: 500;
+      font-size: 0.95rem;
+      border: 1px solid #d4b5a0;
+      transition: 0.25s;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .btn-ghost:hover {
+      background: #1a1a18;
+      color: #ffffff;
+      border-color: #1a1a18;
+    }
+    .scroll-hint {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: rgba(26, 26, 24, 0.45);
+    }
+    .scroll-line {
+      width: 1px;
+      height: 32px;
+      background: #d4941e;
+      margin: 0 auto;
+    }
 
-  /* NAV */
-  nav {
-    position: fixed;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 100;
-    display: flex;
-    align-items: center;
-    gap: 2px;
-    background: rgba(17,17,16,0.82);
-    backdrop-filter: blur(20px) saturate(180%);
-    border: 1px solid var(--border-default);
-    border-radius: var(--radius-pill);
-    padding: 6px 8px;
-  }
+    /* ===== STATS BAR ===== */
+    .stats-bar {
+      max-width: 1200px;
+      margin: 0 auto 24px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      background: #f8f7f5;
+      border-radius: 60px;
+      padding: 12px 16px;
+    }
+    .stat-item {
+      text-align: center;
+      padding: 8px 4px;
+    }
+    .stat-num {
+      display: block;
+      font-family: 'Instrument Serif', serif;
+      font-size: 2rem;
+      font-weight: 400;
+      color: #1a1a18;
+    }
+    .stat-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: rgba(26, 26, 24, 0.45);
+    }
 
-  .nav-logo {
-    width: 28px;
-    height: 28px;
-    object-fit: contain;
-    margin-right: 4px;
-    margin-left: 4px;
-    filter: drop-shadow(0 0 6px rgba(232,160,32,0.3));
-  }
+    /* ===== STORY ===== */
+    .story-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: start;
+    }
+    .story-text p {
+      font-size: 1rem;
+      color: rgba(26, 26, 24, 0.72);
+      margin-bottom: 16px;
+      line-height: 1.7;
+    }
+    .story-visual {
+      display: flex;
+      justify-content: center;
+    }
+    .story-card {
+      background: #f8f7f5;
+      border-radius: 40px;
+      padding: 32px 28px;
+      width: 100%;
+      max-width: 420px;
+    }
+    .story-card-inner {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .food-emoji-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+    .food-emoji-item {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 16px 6px;
+      text-align: center;
+      font-size: 1.8rem;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+    }
+    .food-emoji-item span {
+      display: block;
+      font-size: 0.7rem;
+      font-weight: 500;
+      color: #1a1a18;
+      margin-top: 4px;
+    }
+    .location-badge {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      background: #ffffff;
+      padding: 16px 18px;
+      border-radius: 28px;
+      font-size: 0.85rem;
+      color: rgba(26, 26, 24, 0.72);
+    }
+    .location-badge svg {
+      flex-shrink: 0;
+      margin-top: 2px;
+      color: #d4941e;
+    }
+    .location-badge-text strong {
+      display: block;
+      font-weight: 600;
+    }
 
-  nav a {
-    color: var(--text-secondary);
-    text-decoration: none;
-    font-size: 13px;
-    font-weight: 500;
-    letter-spacing: 0.01em;
-    padding: 7px 16px;
-    border-radius: var(--radius-pill);
-    transition: color 0.2s var(--ease-smooth), background 0.2s var(--ease-smooth);
-  }
-  nav a:hover { color: var(--text-primary); background: var(--bg-elevated); }
-  nav a.active { color: var(--accent); background: rgba(232,160,32,0.1); }
+    /* ===== VALUES ===== */
+    .values-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+    }
+    .value-card {
+      background: #f8f7f5;
+      border-radius: 32px;
+      padding: 32px 24px;
+      text-align: center;
+    }
+    .value-icon {
+      font-size: 2.8rem;
+      margin-bottom: 12px;
+    }
+    .value-title {
+      font-weight: 600;
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+    }
+    .value-desc {
+      color: rgba(26, 26, 24, 0.72);
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
 
-  /* GRAIN OVERLAY */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 0;
-    opacity: 0.04;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
-    background-size: 200px;
-  }
+    /* ===== REVIEWS ===== */
+    .reviews-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+    }
+    .review-card {
+      background: #f8f7f5;
+      border-radius: 32px;
+      padding: 28px 24px;
+    }
+    .review-stars {
+      color: #d4941e;
+      font-size: 1.1rem;
+      letter-spacing: 2px;
+      margin-bottom: 10px;
+    }
+    .review-text {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin-bottom: 20px;
+      color: #1a1a18;
+    }
+    .review-author {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .review-avatar {
+      font-size: 1.6rem;
+      background: #f1f0ec;
+      width: 40px;
+      height: 40px;
+      border-radius: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .review-name {
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    .review-source {
+      font-size: 0.7rem;
+      color: rgba(26, 26, 24, 0.45);
+    }
 
-  /* HERO */
-  .hero {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 120px 24px 80px;
-    position: relative;
-    overflow: hidden;
-  }
+    /* ===== SPECIALTIES STRIP ===== */
+    .spec-section {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 0;
+    }
+    .spec-inner {
+      background: #f8f7f5;
+      border-radius: 60px;
+      padding: 48px 40px;
+    }
+    .spec-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-bottom: 32px;
+    }
+    .spec-header .section-tag {
+      margin-bottom: 2px;
+    }
+    .spec-header .section-title {
+      margin-bottom: 0;
+    }
+    .spec-scroll {
+      display: flex;
+      gap: 20px;
+      overflow-x: auto;
+      padding: 4px 0 12px;
+      scrollbar-width: thin;
+      scrollbar-color: #d4941e #e8e6e2;
+    }
+    .spec-scroll::-webkit-scrollbar {
+      height: 6px;
+    }
+    .spec-scroll::-webkit-scrollbar-track {
+      background: #e8e6e2;
+      border-radius: 12px;
+    }
+    .spec-scroll::-webkit-scrollbar-thumb {
+      background: #d4941e;
+      border-radius: 12px;
+    }
+    .spec-card {
+      flex: 0 0 200px;
+      background: #ffffff;
+      border-radius: 40px;
+      padding: 24px 20px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+    }
+    .spec-emoji {
+      font-size: 2.2rem;
+      display: block;
+      margin-bottom: 6px;
+    }
+    .spec-name {
+      font-weight: 600;
+      font-size: 1rem;
+      margin-bottom: 2px;
+    }
+    .spec-price {
+      font-weight: 500;
+      color: #d4941e;
+      font-size: 0.9rem;
+      margin-bottom: 6px;
+    }
+    .spec-desc {
+      font-size: 0.75rem;
+      color: rgba(26, 26, 24, 0.45);
+      line-height: 1.4;
+    }
 
-  .hero::after {
-    content: '';
-    position: absolute;
-    top: -20%;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 900px;
-    height: 600px;
-    background: radial-gradient(ellipse at center,
-      rgba(232,160,32,0.14) 0%,
-      rgba(196,117,26,0.06) 40%,
-      transparent 70%);
-    pointer-events: none;
-  }
+    /* ===== DELIVERY BANNER ===== */
+    .delivery-banner {
+      background: #1a1a18;
+      border-radius: 60px;
+      padding: 40px 44px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 24px;
+      color: #ffffff;
+    }
+    .delivery-banner-text h3 {
+      font-family: 'Instrument Serif', serif;
+      font-size: 1.8rem;
+      font-weight: 400;
+    }
+    .delivery-banner-text p {
+      color: #d4b5a0;
+      max-width: 400px;
+      font-size: 0.95rem;
+    }
+    .delivery-banner .btn-primary {
+      background: #ffffff;
+      color: #1a1a18;
+    }
+    .delivery-banner .btn-primary:hover {
+      background: #d4941e;
+      color: #ffffff;
+    }
 
-  .hero-eyebrow {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: rgba(232,160,32,0.08);
-    border: 1px solid rgba(232,160,32,0.2);
-    border-radius: var(--radius-pill);
-    padding: 6px 14px;
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--accent);
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    margin-bottom: 32px;
-    position: relative;
-    z-index: 1;
-  }
+    /* ===== INFO GRID (HOURS & CONTACT) ===== */
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+    }
+    .info-card {
+      background: #f8f7f5;
+      border-radius: 40px;
+      padding: 32px 28px;
+    }
+    .info-card-title {
+      font-weight: 600;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .hours-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .hours-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.9rem;
+      color: #1a1a18;
+      border-bottom: 1px solid rgba(26, 26, 24, 0.06);
+      padding-bottom: 8px;
+    }
+    .hours-row:last-child {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+    .hours-day {
+      font-weight: 500;
+    }
+    .hours-time {
+      color: rgba(26, 26, 24, 0.72);
+    }
+    .hours-open {
+      background: #d4941e;
+      color: #ffffff;
+      font-size: 0.6rem;
+      font-weight: 600;
+      padding: 2px 12px;
+      border-radius: 40px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+    .contact-list {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .contact-row {
+      display: flex;
+      gap: 14px;
+    }
+    .contact-icon {
+      font-size: 1.2rem;
+      width: 28px;
+      text-align: center;
+      color: #d4941e;
+    }
+    .contact-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: rgba(26, 26, 24, 0.45);
+    }
+    .contact-value {
+      font-weight: 500;
+      font-size: 0.95rem;
+      color: #1a1a18;
+    }
 
-  .hero-logo {
-    width: 100px;
-    height: 100px;
-    margin-bottom: 36px;
-    position: relative;
-    z-index: 1;
-    filter: drop-shadow(0 0 28px rgba(232,160,32,0.35));
-    object-fit: contain;
-  }
+    /* ===== FOOTER ===== */
+    footer {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 0 32px;
+      border-top: 1px solid rgba(26, 26, 24, 0.06);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .footer-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 600;
+      font-size: 1.1rem;
+    }
+    .footer-logo {
+      height: 36px;
+      width: auto;
+    }
+    .footer-links {
+      display: flex;
+      gap: 28px;
+      font-size: 0.9rem;
+      color: rgba(26, 26, 24, 0.72);
+    }
+    .footer-links a:hover {
+      color: #d4941e;
+    }
+    .footer-copy {
+      font-size: 0.8rem;
+      color: rgba(26, 26, 24, 0.45);
+      width: 100%;
+      text-align: center;
+      margin-top: 8px;
+    }
 
-  .hero h1 {
-    font-family: 'Instrument Serif', Georgia, serif;
-    font-size: clamp(52px, 9vw, 104px);
-    font-weight: 400;
-    letter-spacing: -0.03em;
-    line-height: 0.92;
-    position: relative;
-    z-index: 1;
-    background: linear-gradient(180deg, #f5f0e8 30%, rgba(245,240,232,0.5) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    max-width: 14ch;
-  }
-
-  .hero h1 em {
-    font-style: italic;
-    background: linear-gradient(135deg, #e8a020 0%, #f5c842 50%, #e8a020 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .hero-sub {
-    font-size: clamp(15px, 2vw, 18px);
-    color: var(--text-secondary);
-    max-width: 48ch;
-    line-height: 1.65;
-    margin-top: 24px;
-    position: relative;
-    z-index: 1;
-    letter-spacing: -0.005em;
-  }
-
-  .hero-ctas {
-    display: flex;
-    gap: 12px;
-    margin-top: 40px;
-    flex-wrap: wrap;
-    justify-content: center;
-    position: relative;
-    z-index: 1;
-  }
-
-  .btn-primary {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: var(--accent);
-    color: #0a0a08;
-    font-size: 14px;
-    font-weight: 600;
-    letter-spacing: -0.01em;
-    padding: 12px 24px;
-    border-radius: var(--radius-pill);
-    text-decoration: none;
-    transition: transform 0.2s var(--ease-spring), box-shadow 0.2s var(--ease-smooth), background 0.2s;
-  }
-  .btn-primary:hover {
-    transform: translateY(-2px);
-    background: #f0ab28;
-    box-shadow: 0 8px 32px rgba(232,160,32,0.35);
-  }
-  .btn-primary svg { transition: transform 0.2s var(--ease-spring); }
-  .btn-primary:hover svg { transform: translateX(3px); }
-
-  .btn-ghost {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: transparent;
-    color: var(--text-secondary);
-    font-size: 14px;
-    font-weight: 500;
-    letter-spacing: -0.01em;
-    padding: 12px 24px;
-    border-radius: var(--radius-pill);
-    border: 1px solid var(--border-default);
-    text-decoration: none;
-    transition: color 0.2s var(--ease-smooth), border-color 0.2s var(--ease-smooth), background 0.2s;
-  }
-  .btn-ghost:hover {
-    color: var(--text-primary);
-    border-color: var(--border-hover);
-    background: var(--bg-elevated);
-  }
-
-  /* SCROLL INDICATOR */
-  .scroll-hint {
-    position: absolute;
-    bottom: 36px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-    color: var(--text-muted);
-    font-size: 11px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-  .scroll-line {
-    width: 1px;
-    height: 40px;
-    background: linear-gradient(to bottom, transparent, var(--accent), transparent);
-    animation: scrollLine 1.8s ease-in-out infinite;
-  }
-  @keyframes scrollLine {
-    0%, 100% { opacity: 0.3; transform: scaleY(0.6); }
-    50% { opacity: 1; transform: scaleY(1); }
-  }
-
-  /* STATS BAR */
-  .stats-bar {
-    border-top: 1px solid var(--border-subtle);
-    border-bottom: 1px solid var(--border-subtle);
-    padding: 40px 24px;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    max-width: 900px;
-    margin: 0 auto;
-    gap: 0;
-  }
-  .stat-item {
-    text-align: center;
-    padding: 0 20px;
-    border-right: 1px solid var(--border-subtle);
-  }
-  .stat-item:last-child { border-right: none; }
-  .stat-num {
-    font-family: 'Instrument Serif', Georgia, serif;
-    font-size: clamp(32px, 4vw, 48px);
-    font-weight: 400;
-    color: var(--accent);
-    letter-spacing: -0.03em;
-    line-height: 1;
-    display: block;
-  }
-  .stat-label {
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--text-muted);
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    margin-top: 6px;
-    display: block;
-  }
-
-  /* SECTIONS */
-  .section {
-    padding: 96px 24px;
-    max-width: 1200px;
-    margin: 0 auto;
-    position: relative;
-    z-index: 1;
-  }
-
-  .section-tag {
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 16px;
-  }
-
-  .section-title {
-    font-family: 'Instrument Serif', Georgia, serif;
-    font-size: clamp(32px, 4.5vw, 56px);
-    font-weight: 400;
-    letter-spacing: -0.03em;
-    line-height: 1.05;
-    max-width: 16ch;
-  }
-
-  /* STORY SECTION */
-  .story-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 64px;
-    align-items: center;
-    margin-top: 56px;
-  }
-
-  .story-text p {
-    font-size: 16px;
-    line-height: 1.75;
-    color: var(--text-secondary);
-    letter-spacing: -0.005em;
-    max-width: 52ch;
-    margin-bottom: 20px;
-  }
-  .story-text p:last-child { margin-bottom: 0; }
-
-  .story-visual {
-    position: relative;
-  }
-
-  .story-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-xl);
-    overflow: hidden;
-    position: relative;
-  }
-  .story-card::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg,
-      rgba(232,160,32,0.05) 0%,
-      transparent 60%);
-    pointer-events: none;
-  }
-  /* Inner highlight */
-  .story-card::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(232,160,32,0.4), transparent);
-  }
-
-  .story-card-inner {
-    padding: 36px;
-  }
-
-  .food-emoji-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-    margin-bottom: 28px;
-  }
-
-  .food-emoji-item {
-    aspect-ratio: 1;
-    background: var(--bg-elevated);
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-lg);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    font-size: 28px;
-    transition: transform 0.2s var(--ease-spring), border-color 0.2s;
-    cursor: default;
-  }
-  .food-emoji-item:hover {
-    transform: translateY(-4px) scale(1.04);
-    border-color: rgba(232,160,32,0.3);
-  }
-  .food-emoji-item span {
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-  }
-
-  .location-badge {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    background: var(--bg-elevated);
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-lg);
-    padding: 16px 18px;
-  }
-  .location-badge svg { flex-shrink: 0; margin-top: 2px; color: var(--accent); }
-  .location-badge-text { font-size: 13px; line-height: 1.5; color: var(--text-secondary); }
-  .location-badge-text strong { color: var(--text-primary); font-weight: 600; display: block; margin-bottom: 2px; }
-
-  /* VALUES */
-  .values-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-    margin-top: 56px;
-  }
-
-  .value-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-xl);
-    padding: 32px;
-    position: relative;
-    overflow: hidden;
-    transition: border-color 0.25s var(--ease-smooth), transform 0.25s var(--ease-spring);
-  }
-  .value-card::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(232,160,32,0.3), transparent);
-    opacity: 0;
-    transition: opacity 0.25s;
-  }
-  .value-card:hover {
-    border-color: var(--border-hover);
-    transform: translateY(-4px);
-  }
-  .value-card:hover::after { opacity: 1; }
-
-  .value-icon {
-    width: 44px;
-    height: 44px;
-    background: rgba(232,160,32,0.1);
-    border: 1px solid rgba(232,160,32,0.2);
-    border-radius: var(--radius-lg);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 22px;
-    margin-bottom: 20px;
-  }
-
-  .value-title {
-    font-size: 16px;
-    font-weight: 600;
-    letter-spacing: -0.015em;
-    margin-bottom: 10px;
-  }
-
-  .value-desc {
-    font-size: 14px;
-    line-height: 1.65;
-    color: var(--text-secondary);
-    letter-spacing: -0.005em;
-  }
-
-  /* SPECIALTIES */
-  .spec-section {
-    background: var(--bg-card);
-    border-top: 1px solid var(--border-subtle);
-    border-bottom: 1px solid var(--border-subtle);
-    padding: 80px 24px;
-  }
-
-  .spec-inner {
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-
-  .spec-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    margin-bottom: 48px;
-  }
-
-  .spec-scroll {
-    display: flex;
-    gap: 16px;
-    overflow-x: auto;
-    scrollbar-width: none;
-    padding-bottom: 4px;
-  }
-  .spec-scroll::-webkit-scrollbar { display: none; }
-
-  .spec-card {
-    flex: 0 0 220px;
-    background: var(--bg-elevated);
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-xl);
-    padding: 24px;
-    transition: border-color 0.2s, transform 0.2s var(--ease-spring);
-  }
-  .spec-card:hover {
-    border-color: rgba(232,160,32,0.3);
-    transform: translateY(-3px);
-  }
-  .spec-emoji { font-size: 36px; margin-bottom: 14px; display: block; }
-  .spec-name { font-size: 15px; font-weight: 600; letter-spacing: -0.01em; margin-bottom: 4px; }
-  .spec-price {
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--accent);
-    margin-bottom: 8px;
-    font-feature-settings: 'tnum' 1;
-  }
-  .spec-desc { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
-
-  /* HOURS & CONTACT */
-  .info-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-    margin-top: 48px;
-  }
-
-  .info-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-xl);
-    padding: 32px;
-    position: relative;
-    overflow: hidden;
-  }
-  .info-card::after {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(232,160,32,0.25), transparent);
-  }
-
-  .info-card-title {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 14px;
-    font-weight: 600;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    margin-bottom: 24px;
-  }
-  .info-card-title span { font-size: 18px; }
-
-  .hours-list { display: flex; flex-direction: column; gap: 10px; }
-  .hours-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 14px;
-    padding: 10px 0;
-    border-bottom: 1px solid var(--border-subtle);
-  }
-  .hours-row:last-child { border-bottom: none; }
-  .hours-day { color: var(--text-secondary); }
-  .hours-time { color: var(--text-primary); font-weight: 500; font-feature-settings: 'tnum' 1; }
-  .hours-open {
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    color: #4ade80;
-    background: rgba(74,222,128,0.1);
-    border: 1px solid rgba(74,222,128,0.2);
-    border-radius: var(--radius-pill);
-    padding: 3px 8px;
-  }
-
-  .contact-list { display: flex; flex-direction: column; gap: 14px; }
-  .contact-row {
-    display: flex;
-    align-items: flex-start;
-    gap: 14px;
-    font-size: 14px;
-  }
-  .contact-icon {
-    width: 36px;
-    height: 36px;
-    flex-shrink: 0;
-    background: var(--bg-elevated);
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-lg);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 16px;
-  }
-  .contact-info { flex: 1; }
-  .contact-label { font-size: 11px; font-weight: 500; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 3px; }
-  .contact-value { color: var(--text-primary); font-weight: 500; line-height: 1.4; }
-
-  /* FOOTER */
-  footer {
-    border-top: 1px solid var(--border-subtle);
-    padding: 40px 24px;
-    max-width: 1200px;
-    margin: 0 auto;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 16px;
-    position: relative;
-    z-index: 1;
-  }
-  .footer-brand {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 14px;
-    font-weight: 600;
-    letter-spacing: -0.01em;
-  }
-  .footer-logo { width: 28px; height: 28px; }
-  .footer-links { display: flex; gap: 24px; }
-  .footer-links a {
-    font-size: 13px;
-    color: var(--text-muted);
-    text-decoration: none;
-    transition: color 0.2s;
-  }
-  .footer-links a:hover { color: var(--text-secondary); }
-
-  /* ANIMATIONS */
-  .reveal {
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.7s var(--ease-spring), transform 0.7s var(--ease-spring);
-  }
-  .reveal.visible { opacity: 1; transform: translateY(0); }
-  .reveal-group > *:nth-child(1) { transition-delay: 0ms; }
-  .reveal-group > *:nth-child(2) { transition-delay: 80ms; }
-  .reveal-group > *:nth-child(3) { transition-delay: 160ms; }
-  .reveal-group > *:nth-child(4) { transition-delay: 240ms; }
-
-  @media (max-width: 768px) {
-    nav { top: 12px; }
-    nav a { padding: 6px 12px; font-size: 12px; }
-    .stats-bar { grid-template-columns: repeat(2, 1fr); }
-    .stat-item:nth-child(2) { border-right: none; }
-    .story-grid { grid-template-columns: 1fr; gap: 40px; }
-    .values-grid { grid-template-columns: 1fr; }
-    .info-grid { grid-template-columns: 1fr; }
-    .spec-header { flex-direction: column; align-items: flex-start; gap: 16px; }
-    footer { flex-direction: column; text-align: center; }
-    .footer-links { justify-content: center; }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
-  }
-</style>
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 900px) {
+      .story-grid { grid-template-columns: 1fr; }
+      .values-grid { grid-template-columns: 1fr 1fr; }
+      .reviews-grid { grid-template-columns: 1fr 1fr; }
+      .info-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 700px) {
+      body { padding: 0 16px; }
+      .stats-bar { grid-template-columns: repeat(2, 1fr); border-radius: 32px; }
+      .values-grid { grid-template-columns: 1fr; }
+      .reviews-grid { grid-template-columns: 1fr; }
+      .spec-inner { padding: 32px 20px; border-radius: 32px; }
+      .spec-header { flex-direction: column; align-items: flex-start; }
+      .delivery-banner { flex-direction: column; align-items: flex-start; border-radius: 32px; padding: 32px 24px; }
+      footer { flex-direction: column; align-items: center; text-align: center; }
+    }
+    @media (max-width: 480px) {
+      nav { gap: 16px; }
+      .nav-logo { height: 34px; }
+      .hero-ctas .btn-primary, .hero-ctas .btn-ghost { width: 100%; justify-content: center; }
+      .spec-card { flex: 0 0 160px; }
+    }
+  </style>
 </head>
 <body>
-
+ 
 <!-- NAV -->
 <nav>
-  <img src="toran burger logo.svg" alt="Toran Burger" class="nav-logo">
+  <img src="public/images/logos/toran burger logo.svg" alt="Toran Burger" class="nav-logo">
   <a href="index.html" class="active">Profile</a>
   <a href="menu.html">Menu</a>
   <a href="order.html">Order Now</a>
 </nav>
-
+ 
 <!-- HERO -->
 <section class="hero">
-  <img class="hero-logo" src="toran burger logo.svg" alt="Toran Burger Logo">
-
-  <div class="hero-eyebrow">
-    <svg width="8" height="8" viewBox="0 0 8 8" fill="none"><circle cx="4" cy="4" r="4" fill="#e8a020"/></svg>
-    Adama, Ethiopia
-  </div>
-
+  <img class="hero-logo" src="public/images/logos/toran burger logo.svg" alt="Toran Burger Logo">
+ 
   <h1>Crafted for <em>Bold</em> Flavors</h1>
-
+ 
   <p class="hero-sub">
     Toran Burger brings Adama's best burgers, pizzas, and burritos under one roof.
     Premium ingredients, unforgettable taste — dine in or delivered to your door.
   </p>
-
+ 
   <div class="hero-ctas">
     <a href="order.html" class="btn-primary">
       Order Now
@@ -716,13 +637,13 @@
     </a>
     <a href="menu.html" class="btn-ghost">View Menu</a>
   </div>
-
+ 
   <div class="scroll-hint">
     <div class="scroll-line"></div>
     Scroll
   </div>
 </section>
-
+ 
 <!-- STATS BAR -->
 <div class="stats-bar">
   <div class="stat-item reveal">
@@ -742,19 +663,19 @@
     <span class="stat-label">Happy Customers</span>
   </div>
 </div>
-
+ 
 <!-- STORY -->
 <section class="section">
   <p class="section-tag">Our Story</p>
   <h2 class="section-title reveal">Born in Adama, Loved by All</h2>
-
+ 
   <div class="story-grid">
     <div class="story-text reveal">
       <p>Toran Burger was founded with a single mission: to bring world-class fast food flavors to the heart of Adama, Ethiopia. Tucked inside the iconic Batu Tower on Franko Street, we've been serving the city's most talked-about burgers, pizzas, and burritos since day one.</p>
       <p>Every item on our menu is made fresh to order — from our signature King Size Special Burger stacked with all the fixings, to our crispy KFC-style fried chicken and wood-fired-style pizzas. We believe great food shouldn't require a plane ticket.</p>
       <p>Whether you're grabbing a quick lunch between lectures at ASTU, celebrating a milestone, or just craving something extraordinary — Toran is your spot.</p>
     </div>
-
+ 
     <div class="story-visual reveal">
       <div class="story-card">
         <div class="story-card-inner">
@@ -778,12 +699,12 @@
     </div>
   </div>
 </section>
-
+ 
 <!-- VALUES -->
 <section class="section" style="padding-top: 0;">
   <p class="section-tag">What We Stand For</p>
   <h2 class="section-title reveal">Quality You Can Taste</h2>
-
+ 
   <div class="values-grid reveal-group">
     <div class="value-card reveal">
       <div class="value-icon">🔥</div>
@@ -802,7 +723,49 @@
     </div>
   </div>
 </section>
-
+ 
+<!-- CUSTOMER REVIEWS -->
+<section class="section" style="padding-top: 0;">
+  <p class="section-tag">What People Say</p>
+  <h2 class="section-title reveal">Loved by Adama</h2>
+ 
+  <div class="reviews-grid reveal-group">
+    <div class="review-card reveal visible">
+      <div class="review-stars">★★★★☆</div>
+      <p class="review-text">"Best burgers in Adama, hands down. The King Size Special is massive and worth every birr. My go-to spot after class at ASTU."</p>
+      <div class="review-author">
+        <div class="review-avatar">👤</div>
+        <div>
+          <div class="review-name">Daniel T.</div>
+          <div class="review-source">Google Review</div>
+        </div>
+      </div>
+    </div>
+    <div class="review-card reveal">
+      <div class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+      <p class="review-text">"The fasting burger is incredible — you'd never guess it's plant-based. Perfect during fasting season. The staff are super friendly too."</p>
+      <div class="review-author">
+        <div class="review-avatar">👤</div>
+        <div>
+          <div class="review-name">Hana M.</div>
+          <div class="review-source">TikTok Review</div>
+        </div>
+      </div>
+    </div>
+    <div class="review-card reveal">
+      <div class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
+      <p class="review-text">"Ordered delivery for a family dinner — pizza and burritos arrived hot and fresh. Delivery was quick too. Will definitely order again!"</p>
+      <div class="review-author">
+        <div class="review-avatar">👤</div>
+        <div>
+          <div class="review-name">Abebe K.</div>
+          <div class="review-source">Regular Customer</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+ 
 <!-- SPECIALTIES STRIP -->
 <div class="spec-section">
   <div class="spec-inner">
@@ -816,7 +779,7 @@
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 7h10M8 3l4 4-4 4"/></svg>
       </a>
     </div>
-
+ 
     <div class="spec-scroll">
       <div class="spec-card">
         <span class="spec-emoji">👑</span>
@@ -857,12 +820,26 @@
     </div>
   </div>
 </div>
-
+ 
+<!-- DELIVERY BANNER -->
+<section class="section" style="padding-bottom: 0;">
+  <div class="delivery-banner reveal">
+    <div class="delivery-banner-text">
+      <h3>Free Delivery in Adama</h3>
+      <p>Order above 500 ETB and get free delivery anywhere within Adama city. Fast, hot, and straight to your door.</p>
+    </div>
+    <a href="order.html" class="btn-primary">
+      Order Now
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 7h10M8 3l4 4-4 4"/></svg>
+    </a>
+  </div>
+</section>
+ 
 <!-- HOURS & CONTACT -->
 <section class="section">
   <p class="section-tag">Find Us</p>
   <h2 class="section-title reveal">Visit or Get in Touch</h2>
-
+ 
   <div class="info-grid">
     <div class="info-card reveal">
       <div class="info-card-title"><span>🕐</span> Opening Hours</div>
@@ -888,7 +865,7 @@
         </div>
       </div>
     </div>
-
+ 
     <div class="info-card reveal">
       <div class="info-card-title"><span>📍</span> Contact & Location</div>
       <div class="contact-list">
@@ -924,11 +901,11 @@
     </div>
   </div>
 </section>
-
+ 
 <!-- FOOTER -->
 <footer>
   <div class="footer-brand">
-    <img src="toran burger logo.svg" alt="Toran Burger" style="width:28px;height:28px;object-fit:contain;">
+    <img src="public/images/logos/toran burger logo.svg" alt="Toran Burger" class="footer-logo">
     Toran Burger
   </div>
   <div class="footer-links">
@@ -936,9 +913,9 @@
     <a href="menu.html">Menu</a>
     <a href="order.html">Order</a>
   </div>
-  <p style="font-size:12px;color:var(--text-muted);">© 2026 Toran Burger. Adama, Ethiopia.</p>
+  <p class="footer-copy">© 2026 Toran Burger. Adama, Ethiopia. Developed by <a href="https://officialcloverdigital.com">Clover Digital</a></p>
 </footer>
-
+ 
 <script>
   // Scroll reveal
   const obs = new IntersectionObserver(
@@ -946,7 +923,7 @@
     { threshold: 0.08, rootMargin: '0px 0px -40px 0px' }
   );
   document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
-
+ 
   // Animated counters
   function animateCounter(el, target, suffix = '') {
     let start = 0;
@@ -958,7 +935,7 @@
       el.textContent = isDecimal ? start.toFixed(1) + suffix : Math.floor(start) + suffix;
     }, 16);
   }
-
+ 
   const statsObs = new IntersectionObserver(entries => {
     entries.forEach(e => {
       if (e.isIntersecting) {
@@ -974,7 +951,7 @@
       }
     });
   }, { threshold: 0.5 });
-
+ 
   const statsBar = document.querySelector('.stats-bar');
   if (statsBar) statsObs.observe(statsBar);
 </script>
