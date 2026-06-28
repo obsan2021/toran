@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Order — Toran Burger</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="public/css/styles.css">
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <img src="public/images/logos/toran burger logo.svg" alt="Toran Burger" class="nav-logo">
+  <a href="index.html">Profile</a>
+  <a href="menu.html">Menu</a>
+  <a href="order.html" class="active">Order Now</a>
+</nav>
+
+
+<!-- ORDER HISTORY -->
+<div class="order-history">
+  <div class="history-header">
+    <h3 class="history-title">📋 Your Recent Orders</h3>
+    <button class="toggle-history" onclick="toggleHistory()" id="toggleHistoryBtn">Show</button>
+  </div>
+  <div class="history-list" id="historyList" style="display:none;">
+    <div class="history-item">
+      <div class="history-item-head">
+        <div class="history-order-id">#TB-2847</div>
+        <div class="history-date">Today, 2:45 PM</div>
+      </div>
+      <div class="history-item-body">
+        <div class="history-items-summary">👑 King Size Special (1) • 🍕 Pizza (1)</div>
+        <div class="history-total">850 ETB</div>
+      </div>
+      <div class="history-status completed">✓ Completed</div>
+    </div>
+    
+    <div class="history-item">
+      <div class="history-item-head">
+        <div class="history-order-id">#TB-2801</div>
+        <div class="history-date">Yesterday, 7:30 PM</div>
+      </div>
+      <div class="history-item-body">
+        <div class="history-items-summary">🌯 Burrito (2) • 🍹 Mojito (1)</div>
+        <div class="history-total">1050 ETB</div>
+      </div>
+      <div class="history-status completed">✓ Completed</div>
+    </div>
+    
+    <div class="history-item">
+      <div class="history-item-head">
+        <div class="history-order-id">#TB-2756</div>
+        <div class="history-date">3 days ago, 12:15 PM</div>
+      </div>
+      <div class="history-item-body">
+        <div class="history-items-summary">🍔 Special Burger (1) • 🍗 Chicken (1)</div>
+        <div class="history-total">840 ETB</div>
+      </div>
+      <div class="history-status completed">✓ Completed</div>
+    </div>
+  </div>
+</div>
+
+<!-- ORDER TYPE TABS -->
+<div class="order-type-wrap">
+  <p class="order-type-hint">How would you like to enjoy your meal?</p>
+  <div class="order-type-tabs">
+    <div class="type-tab active" data-type="dinein" onclick="setOrderType('dinein')">
+      <span class="type-icon">🍽️</span>
+      <div class="type-name">Dine In</div>
+      <div class="type-desc">Enjoy your meal at our restaurant on Franko St.</div>
+    </div>
+    <div class="type-tab" data-type="takeaway" onclick="setOrderType('takeaway')">
+      <span class="type-icon">🚗</span>
+      <div class="type-name">Takeaway & Delivery</div>
+      <div class="type-desc">Pick up or delivered to your door in Adama.</div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN LAYOUT -->
+<div class="order-layout">
+
+  <!-- LEFT: FORM -->
+  <div>
+
+    <!-- QUICK MENU SELECT -->
+    <div class="form-section">
+      <div class="section-label">Choose Items</div>
+      <div class="quick-add-section">
+        <div class="quick-add-title">Quick Add from Menu</div>
+        <a href="menu.html" class="browse-btn">
+          Full Menu
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6h8M6 2l4 4-4 4"/></svg>
+        </a>
+      </div>
+
+      <div class="quick-items" id="quickItems">
+        <!-- populated by JS -->
+      </div>
+
+      <div class="field single" style="margin-top: 14px;">
+        <label class="field-label">Special Requests / Add-ons</label>
+        <textarea id="specialReq" placeholder="Extra sauce, no onions, spicy level, allergies…"></textarea>
+      </div>
+    </div>
+
+    <!-- CUSTOMER DETAILS -->
+    <div class="form-section">
+      <div class="section-label">Your Details</div>
+      <div class="form-grid">
+        <div class="field">
+          <label class="field-label">Full Name</label>
+          <input type="text" id="custName" placeholder="Abebe Kebede">
+        </div>
+        <div class="field">
+          <label class="field-label">Phone Number</label>
+          <input type="tel" id="custPhone" placeholder="+251 9__ ___ ___">
+        </div>
+      </div>
+    </div>
+
+    <!-- DINE IN -->
+    <div class="form-section dinein-section show">
+      <div class="section-label">Table & Seating</div>
+      <div style="margin-bottom: 16px;">
+        <p style="font-size:13px; color:var(--text-muted); line-height:1.6; margin-bottom: 16px;">
+          Select your preferred table. 🔴 Occupied tables shown in grey.
+        </p>
+        <div class="table-grid" id="tableGrid">
+          <!-- populated by JS -->
+        </div>
+        <p id="tableNote" style="font-size:12px; color:var(--accent); margin-top:12px; min-height:16px;"></p>
+      </div>
+
+      <div style="margin-top: 20px;">
+        <div class="section-label" style="margin-bottom: 14px;">Seating Preference</div>
+        <div class="form-grid">
+          <div class="field">
+            <label class="field-label">Guests</label>
+            <select id="guestCount">
+              <option value="1">1 person</option>
+              <option value="2" selected>2 people</option>
+              <option value="3">3 people</option>
+              <option value="4">4 people</option>
+              <option value="5">5 people</option>
+              <option value="6+">6+ people</option>
+            </select>
+          </div>
+          <div class="field">
+            <label class="field-label">Preferred Area</label>
+            <select id="seatingArea">
+              <option value="any">No preference</option>
+              <option value="window">Window seat</option>
+              <option value="indoor">Indoor — AC</option>
+              <option value="quiet">Quiet corner</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DELIVERY / TAKEAWAY -->
+    <div class="form-section delivery-section">
+      <div class="section-label">Delivery or Pickup</div>
+
+      <div class="payment-opts" style="margin-bottom: 20px;" id="deliveryTypeSel">
+        <div class="payment-opt selected" data-dtype="delivery" onclick="setDeliveryType(this, 'delivery')">
+          <span class="payment-icon">🛵</span>
+          <div>
+            <div class="payment-name">Delivery</div>
+            <div class="payment-sub">We bring it to you</div>
+          </div>
+        </div>
+        <div class="payment-opt" data-dtype="pickup" onclick="setDeliveryType(this, 'pickup')">
+          <span class="payment-icon">🏃</span>
+          <div>
+            <div class="payment-name">Takeaway</div>
+            <div class="payment-sub">Pick up at Batu Tower</div>
+          </div>
+        </div>
+      </div>
+
+      <div id="deliveryAddressFields">
+        <div class="form-grid single">
+          <div class="field">
+            <label class="field-label">Delivery Address in Adama</label>
+            <input type="text" id="deliveryAddr" placeholder="E.g. Near Adama University main gate, green gate…">
+          </div>
+        </div>
+        <div class="form-grid" style="margin-top: 14px;">
+          <div class="field">
+            <label class="field-label">Neighbourhood / Kebele</label>
+            <select id="neighbourhood">
+              <option value="">Select area</option>
+              <option>Franko</option>
+              <option>Batu</option>
+              <option>Awash</option>
+              <option>Alagae</option>
+              <option>Adama University</option>
+              <option>ASTU Campus</option>
+              <option>Alajiman</option>
+              <option>Mojo Road</option>
+              <option>Other (specify above)</option>
+            </select>
+          </div>
+          <div class="field">
+            <label class="field-label">Estimated Delivery Time</label>
+            <select id="deliveryTime">
+              <option>ASAP (20–35 min)</option>
+              <option>In 1 hour</option>
+              <option>In 2 hours</option>
+              <option>Schedule for later today</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div id="pickupFields" style="display:none;">
+        <div class="form-section" style="background:var(--bg-elevated); border:1px solid var(--border-subtle); padding:18px 20px; margin-top:4px; border-radius:var(--radius-lg);">
+          <p style="font-size:13px; color:var(--text-secondary); line-height:1.65;">
+            📍 <strong style="color:var(--text-primary);">Batu Tower, Franko St.</strong><br>
+            Gon B.S Hotel Building, 1st Floor, Adama.<br>
+            Your order will be ready in <strong style="color:var(--accent);">15–20 minutes</strong> from confirmation.
+          </p>
+        </div>
+        <div class="field" style="margin-top:14px;">
+          <label class="field-label">Pickup Time</label>
+          <select id="pickupTime">
+            <option>ASAP (15–20 min)</option>
+            <option>In 30 minutes</option>
+            <option>In 1 hour</option>
+            <option>I'll call to confirm</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAYMENT -->
+    <div class="form-section">
+      <div class="section-label">Payment Method</div>
+      <div class="payment-opts" id="paymentOpts">
+        <div class="payment-opt selected" data-pay="cash" onclick="selectPayment(this)">
+          <span class="payment-icon">💵</span>
+          <div>
+            <div class="payment-name">Cash</div>
+            <div class="payment-sub">Pay on arrival</div>
+          </div>
+        </div>
+        <div class="payment-opt" data-pay="telebirr" onclick="selectPayment(this)">
+          <span class="payment-icon">📱</span>
+          <div>
+            <div class="payment-name">Telebirr</div>
+            <div class="payment-sub">Mobile money</div>
+          </div>
+        </div>
+        <div class="payment-opt" data-pay="cbe" onclick="selectPayment(this)">
+          <span class="payment-icon">🏦</span>
+          <div>
+            <div class="payment-name">CBE Birr</div>
+            <div class="payment-sub">Bank transfer</div>
+          </div>
+        </div>
+        <div class="payment-opt" data-pay="chapa" onclick="selectPayment(this)">
+          <span class="payment-icon">💳</span>
+          <div>
+            <div class="payment-name">Chapa</div>
+            <div class="payment-sub">Card / Online</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- RIGHT: ORDER SUMMARY -->
+  <div class="order-sidebar">
+    <div class="summary-card">
+      <div class="summary-header">
+        <div class="summary-title">Order Summary</div>
+        <div class="summary-badge" id="orderTypeBadge">Dine In</div>
+      </div>
+
+      <div class="summary-items" id="summaryItems">
+        <div class="empty-cart">
+          <span class="empty-icon">🛒</span>
+          Your cart is empty.<br>Add items from the menu above.
+        </div>
+      </div>
+
+      <div class="summary-totals" id="summaryTotals" style="display:none;">
+        <div class="total-row">
+          <span class="label">Subtotal</span>
+          <span class="value" id="subtotalVal">0 ETB</span>
+        </div>
+        <div class="total-row" id="deliveryFeeRow" style="display:none;">
+          <span class="label">Delivery fee</span>
+          <span class="value">50 ETB</span>
+        </div>
+        <div class="total-row">
+          <span class="label">Service</span>
+          <span class="value">Included</span>
+        </div>
+        <div class="total-row main" style="margin-top:8px; padding-top:12px; border-top:1px solid var(--border-subtle);">
+          <span class="label">Total</span>
+          <span class="value" id="totalVal">0 ETB</span>
+        </div>
+      </div>
+
+      <div class="summary-footer">
+        <button class="place-order-btn" onclick="placeOrder()">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 1L11.5 6.5L17.5 7.5L13 11.5L14 17.5L9 14.5L4 17.5L5 11.5L0.5 7.5L6.5 6.5L9 1Z"/></svg>
+          Place Order
+        </button>
+        <p class="summary-note">
+          By ordering you agree to our terms.<br>
+          Estimated wait: 15–35 min.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SUCCESS OVERLAY -->
+<div class="success-overlay" id="successOverlay">
+  <div class="success-card">
+    <span class="success-icon">🎉</span>
+    <h2 class="success-title">Order Placed!</h2>
+    <p class="success-sub">
+      Your food is being prepared with love at Toran Burger.<br>
+      <span id="successMsg">We'll see you soon at Batu Tower!</span>
+    </p>
+    <div class="success-order-id" id="successOrderId">Order #TB-0000</div>
+    <div class="success-actions">
+      <button class="btn-primary" onclick="closeSuccess()">Track Order</button>
+      <a href="menu.html" class="btn-ghost">Order More</a>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">
+    <img src="public/images/logos/toran burger logo.svg" alt="Toran Burger" style="width:28px;height:28px;object-fit:contain;">
+    Toran Burger
+  </div>
+  <div class="footer-links">
+    <a href="index.html">Profile</a>
+    <a href="menu.html">Menu</a>
+    <a href="order.html">Order</a>
+  </div>
+  <p style="font-size:12px;color:var(--text-muted);">© 2026 Toran Burger. Adama, Ethiopia.Developed by <a href="https://officialcloverdigital.com">Clover Digital</a></p>
+</footer>
+
+<script>
+// ─── DATA ─────────────────────────────────────────────────────────────────────
+const MENU_ITEMS = [
+  { id: 1, emoji: '👑', name: 'King Size Special Burger', price: 500, cat: 'Burgers' },
+  { id: 2, emoji: '🍔', name: 'Special Burger', price: 400, cat: 'Burgers' },
+  { id: 3, emoji: '🌿', name: 'Fasting Burger', price: 300, cat: 'Burgers' },
+  { id: 4, emoji: '🥗', name: 'Special Club', price: 380, cat: 'Burgers' },
+  { id: 5, emoji: '🍕', name: 'Special Pizza', price: 480, cat: 'Pizza' },
+  { id: 6, emoji: '🍗', name: 'Chicken Pizza', price: 450, cat: 'Pizza' },
+  { id: 7, emoji: '🍂', name: '4 Season Pizza', price: 500, cat: 'Pizza' },
+  { id: 8, emoji: '🌯', name: 'Burrito', price: 600, cat: 'Burritos' },
+  { id: 9, emoji: '🌱', name: 'Tsom Burrito', price: 400, cat: 'Burritos' },
+  { id: 10, emoji: '🌶️', name: 'Chicken Wrap', price: 350, cat: 'Burritos' },
+  { id: 11, emoji: '🍗', name: 'KFC Fried Chicken', price: 440, cat: 'Chicken' },
+  { id: 12, emoji: '🦵', name: 'Chicken Leg', price: 420, cat: 'Chicken' },
+  { id: 13, emoji: '🍓', name: 'Strawberry Mojito', price: 150, cat: 'Drinks' },
+  { id: 14, emoji: '🍍', name: 'Pineapple Mojito', price: 150, cat: 'Drinks' },
+  { id: 15, emoji: '⭐', name: 'Toran Special', price: 190, cat: 'Drinks' },
+];
+
+let cart = {};
+let orderType = 'dinein'; // dinein | takeaway
+let deliveryType = 'delivery'; // delivery | pickup
+let selectedTable = null;
+
+// ─── INIT ──────────────────────────────────────────────────────────────────────
+function init() {
+  renderQuickItems();
+  renderTableGrid();
+  // Load cart from session if coming from menu page
+  try {
+    const stored = JSON.parse(sessionStorage.getItem('toranCart') || '[]');
+    stored.forEach(i => { cart[i.name] = { qty: i.qty, price: i.price, emoji: MENU_ITEMS.find(m => m.name === i.name)?.emoji || '🍽️' }; });
+    updateSummary();
+  } catch(e) {}
+}
+
+// ─── QUICK ITEMS ───────────────────────────────────────────────────────────────
+function renderQuickItems() {
+  const container = document.getElementById('quickItems');
+  container.innerHTML = MENU_ITEMS.map(item => `
+    <div class="quick-item">
+      <span class="qi-emoji">${item.emoji}</span>
+      <div class="qi-info">
+        <div class="qi-name">${item.name}</div>
+        <div class="qi-price">${item.price} ETB</div>
+      </div>
+      <div class="qty-control">
+        <button class="qty-btn" onclick="changeQty('${item.name}', -1, ${item.price}, '${item.emoji}')">−</button>
+        <span class="qty-num" id="qty-${item.id}">0</span>
+        <button class="qty-btn" onclick="changeQty('${item.name}', 1, ${item.price}, '${item.emoji}')">+</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function changeQty(name, delta, price, emoji) {
+  if (!cart[name]) cart[name] = { qty: 0, price, emoji };
+  cart[name].qty = Math.max(0, cart[name].qty + delta);
+  if (cart[name].qty === 0) delete cart[name];
+
+  // Update qty display
+  const item = MENU_ITEMS.find(m => m.name === name);
+  if (item) {
+    const el = document.getElementById('qty-' + item.id);
+    if (el) el.textContent = cart[name]?.qty || 0;
+  }
+
+  updateSummary();
+}
+
+// ─── TABLE GRID ────────────────────────────────────────────────────────────────
+const OCCUPIED = [3, 7, 11]; // example occupied tables
+
+function renderTableGrid() {
+  const grid = document.getElementById('tableGrid');
+  let html = '';
+  for (let i = 1; i <= 18; i++) {
+    const occ = OCCUPIED.includes(i);
+    html += `<button class="table-btn ${occ ? 'occupied' : ''}" 
+      ${occ ? 'disabled' : `onclick="selectTable(${i}, this)"`}>${i}</button>`;
+  }
+  grid.innerHTML = html;
+}
+
+function selectTable(num, el) {
+  document.querySelectorAll('.table-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedTable = num;
+  document.getElementById('tableNote').textContent = `Table ${num} selected ✓`;
+}
+
+// ─── ORDER TYPE ────────────────────────────────────────────────────────────────
+function setOrderType(type) {
+  orderType = type;
+  document.querySelectorAll('.type-tab').forEach(t => {
+    t.classList.toggle('active', t.dataset.type === type);
+  });
+
+  const badge = document.getElementById('orderTypeBadge');
+  const dineIn = document.querySelector('.dinein-section');
+  const delivery = document.querySelector('.delivery-section');
+  const feeRow = document.getElementById('deliveryFeeRow');
+
+  if (type === 'dinein') {
+    badge.textContent = 'Dine In';
+    dineIn.classList.add('show');
+    delivery.classList.remove('show');
+    feeRow.style.display = 'none';
+  } else {
+    badge.textContent = deliveryType === 'delivery' ? 'Delivery' : 'Takeaway';
+    dineIn.classList.remove('show');
+    delivery.classList.add('show');
+    feeRow.style.display = deliveryType === 'delivery' ? 'flex' : 'none';
+  }
+  updateSummary();
+}
+
+function setDeliveryType(el, type) {
+  deliveryType = type;
+  document.querySelectorAll('#deliveryTypeSel .payment-opt').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('deliveryAddressFields').style.display = type === 'delivery' ? 'block' : 'none';
+  document.getElementById('pickupFields').style.display = type === 'pickup' ? 'block' : 'none';
+  document.getElementById('orderTypeBadge').textContent = type === 'delivery' ? 'Delivery' : 'Takeaway';
+  document.getElementById('deliveryFeeRow').style.display = type === 'delivery' ? 'flex' : 'none';
+  updateSummary();
+}
+
+// ─── PAYMENT ───────────────────────────────────────────────────────────────────
+function selectPayment(el) {
+  document.querySelectorAll('#paymentOpts .payment-opt').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+// ─── SUMMARY ───────────────────────────────────────────────────────────────────
+function updateSummary() {
+  const items = Object.entries(cart).filter(([,v]) => v.qty > 0);
+  const container = document.getElementById('summaryItems');
+  const totals = document.getElementById('summaryTotals');
+
+  if (items.length === 0) {
+    container.innerHTML = `<div class="empty-cart"><span class="empty-icon">🛒</span>Your cart is empty.<br>Add items from the menu above.</div>`;
+    totals.style.display = 'none';
+    return;
+  }
+
+  container.innerHTML = items.map(([name, {qty, price, emoji}]) => `
+    <div class="summary-item">
+      <span class="si-name">${emoji} ${name}</span>
+      <span class="si-qty">×${qty}</span>
+      <span class="si-price">${(qty * price).toLocaleString()} ETB</span>
+    </div>
+  `).join('');
+
+  const subtotal = items.reduce((acc, [,{qty, price}]) => acc + qty * price, 0);
+  const deliveryFee = (orderType === 'takeaway' && deliveryType === 'delivery') ? 50 : 0;
+  const total = subtotal + deliveryFee;
+
+  document.getElementById('subtotalVal').textContent = subtotal.toLocaleString() + ' ETB';
+  document.getElementById('totalVal').textContent = total.toLocaleString() + ' ETB';
+  totals.style.display = 'block';
+}
+
+// ─── PLACE ORDER ───────────────────────────────────────────────────────────────
+function placeOrder() {
+  const items = Object.entries(cart).filter(([,v]) => v.qty > 0);
+  const name = document.getElementById('custName').value.trim();
+  const phone = document.getElementById('custPhone').value.trim();
+
+  if (items.length === 0) { alert('Please add at least one item to your order.'); return; }
+  if (!name) { document.getElementById('custName').focus(); alert('Please enter your name.'); return; }
+  if (!phone) { document.getElementById('custPhone').focus(); alert('Please enter your phone number.'); return; }
+  if (orderType === 'dinein' && !selectedTable) { alert('Please select a table.'); return; }
+
+  const orderId = 'TB-' + String(Math.floor(Math.random() * 9000) + 1000);
+  document.getElementById('successOrderId').textContent = 'Order #' + orderId;
+
+  let msg = '';
+  if (orderType === 'dinein') {
+    msg = `See you at Table ${selectedTable}! Your food is being prepared.`;
+  } else if (deliveryType === 'delivery') {
+    msg = `We'll deliver to you within 20–35 minutes. Track via phone.`;
+  } else {
+    msg = `Ready in 15–20 min. Pick up at Batu Tower, 1st Floor.`;
+  }
+  document.getElementById('successMsg').textContent = msg;
+
+  document.getElementById('successOverlay').classList.add('visible');
+  try { sessionStorage.removeItem('toranCart'); } catch(e) {}
+}
+
+function closeSuccess() {
+  document.getElementById('successOverlay').classList.remove('visible');
+  cart = {};
+  MENU_ITEMS.forEach(item => {
+    const el = document.getElementById('qty-' + item.id);
+    if (el) el.textContent = '0';
+  });
+  updateSummary();
+  selectedTable = null;
+  document.querySelectorAll('.table-btn').forEach(b => b.classList.remove('selected'));
+  document.getElementById('tableNote').textContent = '';
+  document.getElementById('custName').value = '';
+  document.getElementById('custPhone').value = '';
+}
+
+// ─── BOOT ─────────────────────────────────────────────────────────────────────
+init();
+
+// ─── TOGGLE HISTORY ────────────────────────────────────────────────────────────
+function toggleHistory() {
+  const historyList = document.getElementById('historyList');
+  const toggleBtn = document.getElementById('toggleHistoryBtn');
+  const isHidden = historyList.style.display === 'none';
+  
+  historyList.style.display = isHidden ? 'flex' : 'none';
+  toggleBtn.textContent = isHidden ? 'Hide' : 'Show';
+}
+</script>
+</body>
+</html>

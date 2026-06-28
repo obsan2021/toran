@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Menu — Toran Burger</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="public/css/styles.css">
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <img src="public/images/logos/toran burger logo.svg" alt="Toran Burger" class="nav-logo">
+  <a href="index.html">Profile</a>
+  <a href="menu.html" class="active">Menu</a>
+  <a href="order.html">Order Now</a>
+</nav>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="page-eyebrow">
+    <svg width="8" height="8" viewBox="0 0 8 8" fill="none"><circle cx="4" cy="4" r="4" fill="#e8a020"/></svg>
+    Full Menu
+  </div>
+  <h1 class="page-title">Every Dish,<br><em style="font-style:italic; background: linear-gradient(135deg,#e8a020,#f5c842,#e8a020); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;">Every Craving</em></h1>
+  <p class="page-sub">From our legendary burgers to wood-fired pizzas and mega burritos — Toran has you covered.</p>
+</div>
+
+<!-- FILTER TABS -->
+<div class="filter-wrap">
+  <div class="filter-tabs">
+    <button class="filter-tab active" data-filter="all">All Items</button>
+    <button class="filter-tab" data-filter="burgers">🍔 Burgers</button>
+    <button class="filter-tab" data-filter="pizza">🍕 Pizza</button>
+    <button class="filter-tab" data-filter="burritos">🌯 Burritos</button>
+    <button class="filter-tab" data-filter="chicken">🍗 Chicken</button>
+    <button class="filter-tab" data-filter="drinks">🍹 Drinks</button>
+  </div>
+</div>
+
+<!-- MENU CONTENT -->
+<div class="menu-wrap">
+
+  <!-- BURGERS -->
+  <div class="category-section visible-cat" data-cat="burgers">
+    <div class="category-header">
+      <h2 class="category-name">Burgers</h2>
+      <span class="category-count">4 items</span>
+    </div>
+    <div class="food-grid">
+
+      <div class="food-card featured reveal" data-cat="burgers">
+        <div class="card-visual" style="background: linear-gradient(135deg, #1a140a, #241808);">
+          <span class="card-badge badge-popular">⭐ Most Popular</span>
+          👑
+        </div>
+        <div class="card-body">
+          <div class="card-meta">
+            <div class="card-name">King Size Special Burger</div>
+            <div class="card-price">500 ETB</div>
+          </div>
+          <p class="card-desc">Our crown jewel. A towering burger stacked with a premium double patty, caramelized onions, fresh tomato, crisp lettuce, pickles, and our secret Toran sauce. One bite and you'll understand the hype.</p>
+          <div class="card-footer">
+            <div class="card-tags">
+              <span class="card-tag">🔥 Signature</span>
+              <span class="card-tag">Extra Large</span>
+            </div>
+            <button class="add-btn" onclick="addToCart('King Size Special Burger', 500)">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M7 2v10M2 7h10"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="food-card reveal" data-cat="burgers">
+        <div class="card-visual" style="background: linear-gradient(135deg, #18120a, #1f1608);">
+          <span class="card-badge badge-hot">🔥 Hot Seller</span>
+          🍔
+        </div>
+        <div class="card-body">
+          <div class="card-meta">
+            <div class="card-name">Special Burger</div>
+            <div class="card-price">400 ETB</div>
+          </div>
+          <p class="card-desc">The classic Toran experience. Juicy beef patty, premium toppings, served with our house-blended sauce. The burger that started it all.</p>
+          <div class="card-footer">
+            <div class="card-tags"><span class="card-tag">Classic</span><span class="card-tag">Best Value</span></div>
+            <button class="add-btn" onclick="addToCart('Special Burger', 400)">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M7 2v10M2 7h10"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="food-card reveal" data-cat="burgers">
+        <div class="card-visual" style="background: linear-gradient(135deg, #0e1a0e, #121f12);">
+          <span class="card-badge badge-fasting">🌿 Fasting</span>
+          🌿🍔
+        </div>
+        <div class="card-body">
+          <div class="card-meta">
+            <div class="card-name">Fasting Burger</div>
+            <div class="card-price">300 ETB</div>
+          </div>
+          <p class="card-desc">Our plant-based masterpiece. A satisfying vegan patty with fresh garden vegetables and tahini-based sauce. Available year-round, perfect for fasting season.</p>
+          <div class="card-footer">
+            <div class="card-tags"><span class="card-tag">🌱 Vegan</span><span class="card-tag">Fasting OK</span></div>
+            <button class="add-btn" onclick="addToCart('Fasting Burger', 300)">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M7 2v10M2 7h10"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="food-card reveal" data-cat="burgers">
+        <div class="card-visual" style="background: linear-gradient(135deg, #18100a, #241608);">
+          🥗🍔
+        </div>
+        <div class="card-body">
+          <div class="card-meta">
+            <div class="card-name">Special Club</div>
+            <div class="card-price">380 ETB</div>
+          </div>
+          <p class="card-desc">Triple-layered club sandwich with grilled chicken, crispy bacon, fresh veggies and our signature house dressing. A true crowd-pleaser.</p>
+          <div class="card-footer">
+            <div class="card-tags"><span class="card-tag">Triple Stack</span></div>
+            <button class="add-btn" onclick="addToCart('Special Club', 380)">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M7 2v10M2 7h10"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PIZZA -->
+  <div class="category-section visible-cat" data-cat="pizza">
+    <div class="category-header">
+      <h2 class="category-name">Pizza</h2>
+      <span class="category-count">3 items</span>
+    </div>
+    <div class="food-grid">
+
+      <div class="food-card featured reveal" data-cat="pizza">
+        <div class="card-visual" style="background: linear-gradient(135deg, #1a0e08, #241208);">
+          <span class="card-badge badge-popular">⭐ Top Pick</span>
+          🍕
+        </div>
+        <div class="card-body">
+          <div class="card-meta">
+            <div class="card-name">Special Pizza</div>
+            <div class="card-price">480 ETB</div>
+          </div>
+          <p class="card-desc">Adama's most talked-about pizza. Loaded with premium toppings on a hand-stretched base, baked to golden perfection. Features mozzarella, mixed peppers, onions, olives, and choice of protein. Massive and shareable.</p>
+          <div class="card-footer">
+            <div class="card-tags"><span class="card-tag">🔥 Fan Fave</span><span class="card-tag">Large</span></div>
+            <button class="add-btn" onclick="addToCart('Special Pizza', 480)">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M7 2v10M2 7h10"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="food-card reveal" data-cat="pizza">
+        <div class="card-visual" style="background: linear-gradient(135deg, #1a0808, #200e0e);">
+          <span class="card-badge badge-hot">🍗 Chicken</span>
+          🍗🍕
+        </div>
+        <div class="card-body">
+          <div class="card-meta">
+            <div class="card-name">Chicken Pizza</div>
+            <div class="card-price">450 ETB</div>
+          </div>
+          <p class="card-desc">Generous shredded chicken, creamy mozzarella and spiced tomato base. The go-to for chicken lovers — crispy edges, soft center.</p>
+          <div class="card-footer">
+            <div class="card-tags"><span class="card-tag">Chicken</span></div>
+            <button class="add-btn" onclick="addToCart('Chicken Pizza', 450)">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M7 2v10M2 7h10"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="food-card reveal" data-cat="pizza">
+        <div class="card-visual" style="background: linear-gradient(135deg, #0e1218, #101820);">
+          <span class="card-badge badge-new">✨ New</span>
+          🍂🍕
+        </div>
+        <div class="card-body">
+          <div class="card-meta">
+            <div class="card-name">4 Season Pizza</div>
+            <div class="card-price">500 ETB</div>
+          </div>
+          <p class="card-desc">Four distinct flavors in four quadrants. Ham & mushroom, pepperoni, vegetarian, and BBQ chicken — one pizza, four experiences.</p>
+          <div class="card-footer">
+            <div class="card-tags"><span class="card-tag">4-in-1</span><span class="card-tag">Large</span></div>
+            <button class="add-btn" onclick="addToCart('4 Season Pizza', 500)">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M7 2v10M2 7h10"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- BURRITOS -->
+  <div class="category-section visible-cat" data-cat="burritos">
+    <div class="category-header">
+      <h2 class="category-name">Burritos</h2>
+      <span class="category-count">3 items</span>
+    </div>
+    <div class="food-grid">
+
+      <div class="food-card featured reveal" data-cat="burritos">
+        <div class="card-visual" style="background: linear-gradient(135deg, #1a1208, #24180a);">
+          <span class="card-badge badge-popular">💥 Massive</span>
+          🌯
+        </div>
+        <div class="card-body">
+          <div class="card-meta">
+            <div class="card-name">Burrito</div>
+            <div class="card-price">600 ETB</div>
+          </div>
+          <p class="card-desc">Toran's showstopper. A massive flour tortilla wrapped around seasoned rice, black beans, grilled protein, pico de gallo, guacamole, and sour cream. So big it comes with a warning. A local legend in Adama.</p>
+          <div class="card-footer">
+            <div class="card-tags"><span class="card-tag">🌶️ Spicy Option</span><span class="card-tag">XXL</span></div>
+            <button class="add-btn" onclick="addToCart('Burrito', 600)">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M7 2v10M2 7h10"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="food-card reveal" data-cat="burritos">
+        <div class="card-visual" style="background: linear-gradient(135deg, #0e1a0e, #121f12);">
+          <span class="card-badge badge-fasting">🌿 Tsom</span>
+          🌱🌯
+        </div>
+        <div class="card-body">
+          <div class="card-meta">
+            <div class="card-name">Tsom Burrito</div>
+            <div class="card-price">400 ETB</div>
+          </div>
+          <p class="card-desc">Ethiopian fasting-style burrito. Packed with lentils, roasted vegetables, shiro, and spiced tomatoes. Entirely plant-based and deeply flavorful.</p>
+          <div class="card-footer">
+            <div class="card-tags"><span class="card-tag">🌱 Vegan</span><span class="card-tag">Fasting</span></div>
+            <button class="add-btn" onclick="addToCart('Tsom Burrito', 400)">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M7 2v10M2 7h10"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="food-card reveal" data-cat="burritos">
+        <div class="card-visual" style="background: linear-gradient(135deg, #18100e, #241608);">
+          🌶️🌯
+        </div>
+        <div class="card-body">
+          <div class="card-meta">
+            <div class="card-name">Chicken Wrap</div>
+            <div class="card-price">350 ETB</div>
+          </div>
+          <p class="card-desc">Grilled chicken strips, fresh greens, tomato, cucumber and creamy garlic sauce folded in a warm tortilla. Light, fast, and delicious.</p>
+          <div class="card-footer">
+            <div class="card-tags"><span class="card-tag">Quick Bite</span><span class="card-tag">Grilled</span></div>
+            <button class="add-btn" onclick="addToCart('Chicken Wrap', 350)">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M7 2v10M2 7h10"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- CHICKEN -->
+  <div class="category-section visible-cat" data-cat="chicken">
+    <div class="category-header">
+      <h2 class="category-name">Chicken</h2>
+      <span class="category-count">2 items</span>
+    </div>
+    <div class="food-grid">
+
+      <div class="food-card featured reveal" data-cat="chicken">
+        <div class="card-visual" style="background: linear-gradient(135deg, #1a0e06, #241406);">
+          <span class="card-badge badge-hot">🔥 Crispy</span>
+          🍗
+        </div>
+        <div class="card-body">
+          <div class="card-meta">
+            <div class="card-name">KFC Fried Chicken</div>
+            <div class="card-price">440 ETB</div>
+          </div>
+          <p class="card-desc">Eleven secret spices, pressure-fried to crispy perfection. The juiciest fried chicken in Adama. Our recipe is closely guarded — and for good reason. Served with fries and dipping sauce.</p>
+          <div class="card-footer">
+            <div class="card-tags"><span class="card-tag">🔥 Crispy</span><span class="card-tag">+ Fries</span></div>
+            <button class="add-btn" onclick="addToCart('KFC Fried Chicken', 440)">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M7 2v10M2 7h10"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="food-card reveal" data-cat="chicken">
+        <div class="card-visual" style="background: linear-gradient(135deg, #1a100a, #241808);">
+          🦵
+        </div>
+        <div class="card-body">
+          <div class="card-meta">
+            <div class="card-name">Chicken Leg</div>
+            <div class="card-price">420 ETB</div>
+          </div>
+          <p class="card-desc">A big, meaty chicken leg marinated overnight in Toran's special blend of spices and herbs, then fried golden. Fall-off-the-bone tender.</p>
+          <div class="card-footer">
+            <div class="card-tags"><span class="card-tag">Marinated</span><span class="card-tag">Juicy</span></div>
+            <button class="add-btn" onclick="addToCart('Chicken Leg', 420)">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M7 2v10M2 7h10"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- DRINKS -->
+  <div class="category-section visible-cat" data-cat="drinks">
+    <div class="category-header">
+      <h2 class="category-name">Drinks</h2>
+      <span class="category-count">3 items</span>
+    </div>
+    <div class="food-grid">
+
+      <div class="food-card reveal" data-cat="drinks">
+        <div class="card-visual" style="background: linear-gradient(135deg, #1a0a10, #240e18);">
+          <span class="card-badge badge-popular">❤️ Fave</span>
+          🍓🍹
+        </div>
+        <div class="card-body">
+          <div class="card-meta">
+            <div class="card-name">Strawberry Mojito</div>
+            <div class="card-price">150 ETB</div>
+          </div>
+          <p class="card-desc">Fresh strawberries muddled with mint, lime juice, and sparkling water. Sweet, tangy, and perfectly refreshing.</p>
+          <div class="card-footer">
+            <div class="card-tags"><span class="card-tag">Non-Alcoholic</span><span class="card-tag">Refreshing</span></div>
+            <button class="add-btn" onclick="addToCart('Strawberry Mojito', 150)">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M7 2v10M2 7h10"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="food-card reveal" data-cat="drinks">
+        <div class="card-visual" style="background: linear-gradient(135deg, #181a08, #1e2008);">
+          🍍🍹
+        </div>
+        <div class="card-body">
+          <div class="card-meta">
+            <div class="card-name">Pineapple Mojito</div>
+            <div class="card-price">150 ETB</div>
+          </div>
+          <p class="card-desc">Tropical pineapple chunks with fresh mint, lime, and fizzy water. A vacation in a glass — light, zippy, and ice cold.</p>
+          <div class="card-footer">
+            <div class="card-tags"><span class="card-tag">Non-Alcoholic</span><span class="card-tag">Tropical</span></div>
+            <button class="add-btn" onclick="addToCart('Pineapple Mojito', 150)">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M7 2v10M2 7h10"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="food-card reveal" data-cat="drinks">
+        <div class="card-visual" style="background: linear-gradient(135deg, #1a1208, #241808);">
+          <span class="card-badge badge-new">✨ Exclusive</span>
+          ⭐🍹
+        </div>
+        <div class="card-body">
+          <div class="card-meta">
+            <div class="card-name">Toran Special</div>
+            <div class="card-price">190 ETB</div>
+          </div>
+          <p class="card-desc">Our secret recipe house blend. A layered drink that changes with every sip — fruity, refreshing, and exclusively ours. Nobody else makes this in Adama.</p>
+          <div class="card-footer">
+            <div class="card-tags"><span class="card-tag">🔒 Secret Recipe</span><span class="card-tag">Exclusive</span></div>
+            <button class="add-btn" onclick="addToCart('Toran Special', 190)">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M7 2v10M2 7h10"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<!-- CART FAB -->
+<a href="order.html" class="cart-fab" id="cartFab">
+  <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="15" r="1.5"/><circle cx="13" cy="15" r="1.5"/><path d="M1 1.5h2.5l2 8.5h8l2-6H5"/></svg>
+  View Order
+  <span class="cart-count" id="cartCount">0</span>
+</a>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">
+    <img src="public/images/logos/toran burger logo.svg" alt="Toran Burger" style="width:28px;height:28px;object-fit:contain;">
+    Toran Burger
+  </div>
+  <div class="footer-links">
+    <a href="index.html">Profile</a>
+    <a href="menu.html">Menu</a>
+    <a href="order.html">Order</a>
+  </div>
+  <p style="font-size:12px;color:var(--text-muted);">© 2026 Toran Burger. Adama, Ethiopia.Developed by <a href="https://officialcloverdigital.com">Clover Digital</a></p>
+</footer>
+
+<script>
+  // Reveal
+  const obs = new IntersectionObserver(
+    entries => entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } }),
+    { threshold: 0.06, rootMargin: '0px 0px -40px 0px' }
+  );
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+  // Filter tabs
+  const tabs = document.querySelectorAll('.filter-tab');
+  const sections = document.querySelectorAll('.category-section');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      const filter = tab.dataset.filter;
+      sections.forEach(sec => {
+        if (filter === 'all' || sec.dataset.cat === filter) {
+          sec.classList.add('visible-cat');
+        } else {
+          sec.classList.remove('visible-cat');
+        }
+      });
+    });
+  });
+
+  // Cart
+  let cartCount = 0;
+  const cartFab = document.getElementById('cartFab');
+  const cartCountEl = document.getElementById('cartCount');
+  const toast = document.getElementById('toast');
+  let toastTimer;
+
+  function addToCart(name, price) {
+    cartCount++;
+    cartCountEl.textContent = cartCount;
+    cartFab.classList.add('visible');
+
+    clearTimeout(toastTimer);
+    toast.innerHTML = `<span>✓</span> ${name} added — ${price} ETB`;
+    toast.classList.add('show');
+    toastTimer = setTimeout(() => toast.classList.remove('show'), 2500);
+
+    // Store in sessionStorage for order page
+    try {
+      const items = JSON.parse(sessionStorage.getItem('toranCart') || '[]');
+      const existing = items.find(i => i.name === name);
+      if (existing) existing.qty++;
+      else items.push({ name, price, qty: 1 });
+      sessionStorage.setItem('toranCart', JSON.stringify(items));
+    } catch(e) {}
+  }
+
+  // Init cart count from session
+  try {
+    const items = JSON.parse(sessionStorage.getItem('toranCart') || '[]');
+    cartCount = items.reduce((acc, i) => acc + i.qty, 0);
+    if (cartCount > 0) {
+      cartCountEl.textContent = cartCount;
+      cartFab.classList.add('visible');
+    }
+  } catch(e) {}
+</script>
+
+</body>
+</html>
