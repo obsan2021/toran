@@ -1,0 +1,569 @@
+<!-- admin-menu.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin — Toran Burger Menu</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="public/css/styles.css" />
+  <style>
+    /* ===== MENU ADMIN SPECIFIC ===== */
+    .menu-admin {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+
+    .menu-admin-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-bottom: 32px;
+    }
+
+    .menu-admin-title {
+      font-family: 'Instrument Serif', serif;
+      font-size: 2rem;
+      font-weight: 400;
+      color: #1a1a18;
+    }
+
+    .add-item-btn {
+      background: #1a1a18;
+      color: #ffffff;
+      border: none;
+      padding: 10px 22px;
+      border-radius: 40px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .add-item-btn:hover {
+      background: #d4941e;
+      color: #1a1a18;
+    }
+
+    /* ── MENU GRID ── */
+    .menu-admin-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .menu-item-card {
+      background: #ffffff;
+      border: 1px solid rgba(26, 26, 24, 0.06);
+      border-radius: 24px;
+      padding: 20px;
+      transition: 0.25s;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+      position: relative;
+    }
+
+    .menu-item-card:hover {
+      border-color: rgba(212, 148, 30, 0.3);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+    }
+
+    .menu-item-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .menu-item-name {
+      font-weight: 600;
+      font-size: 1.05rem;
+      color: #1a1a18;
+    }
+
+    .menu-item-price {
+      font-weight: 700;
+      color: #d4941e;
+      font-size: 0.95rem;
+      white-space: nowrap;
+    }
+
+    .menu-item-desc {
+      font-size: 0.8rem;
+      color: rgba(26, 26, 24, 0.6);
+      line-height: 1.5;
+      margin-bottom: 12px;
+    }
+
+    .menu-item-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+
+    .menu-tag {
+      font-size: 0.6rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      padding: 3px 10px;
+      border-radius: 20px;
+      background: #f8f7f5;
+      border: 1px solid rgba(26, 26, 24, 0.06);
+      color: rgba(26, 26, 24, 0.6);
+    }
+
+    .menu-tag.veg {
+      background: rgba(34, 197, 94, 0.1);
+      color: #16a34a;
+      border-color: rgba(34, 197, 94, 0.2);
+    }
+
+    .menu-tag.spicy {
+      background: rgba(239, 68, 68, 0.08);
+      color: #dc2626;
+      border-color: rgba(239, 68, 68, 0.15);
+    }
+
+    .menu-tag.popular {
+      background: rgba(212, 148, 30, 0.1);
+      color: #b8860b;
+      border-color: rgba(212, 148, 30, 0.2);
+    }
+
+    .menu-item-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+      border-top: 1px solid rgba(26, 26, 24, 0.06);
+      padding-top: 14px;
+    }
+
+    .menu-item-actions button {
+      flex: 1;
+      background: transparent;
+      border: 1px solid rgba(26, 26, 24, 0.1);
+      padding: 6px 0;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s;
+      color: rgba(26, 26, 24, 0.6);
+    }
+
+    .menu-item-actions .edit-btn:hover {
+      background: #1a1a18;
+      color: #ffffff;
+      border-color: #1a1a18;
+    }
+
+    .menu-item-actions .delete-btn:hover {
+      background: #dc2626;
+      color: #ffffff;
+      border-color: #dc2626;
+    }
+
+    /* ── ADD ITEM MODAL ── */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(26, 26, 24, 0.6);
+      backdrop-filter: blur(6px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 24px;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .modal-overlay.visible {
+      display: flex;
+    }
+
+    .modal-box {
+      background: #ffffff;
+      border-radius: 32px;
+      padding: 40px;
+      max-width: 520px;
+      width: 100%;
+      box-shadow: 0 24px 64px rgba(0, 0, 0, 0.15);
+      animation: slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.96);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .modal-box h2 {
+      font-family: 'Instrument Serif', serif;
+      font-size: 1.8rem;
+      font-weight: 400;
+      margin-bottom: 24px;
+      color: #1a1a18;
+    }
+
+    .modal-field {
+      margin-bottom: 18px;
+    }
+
+    .modal-field label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: rgba(26, 26, 24, 0.5);
+      margin-bottom: 5px;
+    }
+
+    .modal-field input,
+    .modal-field textarea,
+    .modal-field select {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1.5px solid rgba(26, 26, 24, 0.1);
+      border-radius: 14px;
+      font-size: 0.95rem;
+      font-family: 'Inter', sans-serif;
+      transition: border-color 0.2s;
+      background: #fafaf9;
+      color: #1a1a18;
+    }
+
+    .modal-field input:focus,
+    .modal-field textarea:focus,
+    .modal-field select:focus {
+      border-color: #d4941e;
+      outline: none;
+      background: #ffffff;
+      box-shadow: 0 0 0 3px rgba(212, 148, 30, 0.08);
+    }
+
+    .modal-field textarea {
+      resize: vertical;
+      min-height: 70px;
+    }
+
+    .modal-tags-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .modal-tag-option {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      padding: 6px 12px;
+      background: #f8f7f5;
+      border-radius: 20px;
+      border: 1.5px solid transparent;
+      cursor: pointer;
+      transition: 0.2s;
+      color: rgba(26, 26, 24, 0.6);
+    }
+
+    .modal-tag-option:hover {
+      border-color: rgba(26, 26, 24, 0.15);
+    }
+
+    .modal-tag-option.selected {
+      border-color: #d4941e;
+      background: rgba(212, 148, 30, 0.08);
+      color: #1a1a18;
+    }
+
+    .modal-tag-option input[type="checkbox"] {
+      display: none;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 28px;
+    }
+
+    .modal-actions button {
+      flex: 1;
+      padding: 12px;
+      border-radius: 16px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      border: none;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .modal-actions .btn-submit {
+      background: #1a1a18;
+      color: #ffffff;
+    }
+
+    .modal-actions .btn-submit:hover {
+      background: #d4941e;
+      color: #1a1a18;
+    }
+
+    .modal-actions .btn-cancel {
+      background: #f8f7f5;
+      color: #1a1a18;
+      border: 1px solid rgba(26, 26, 24, 0.08);
+    }
+
+    .modal-actions .btn-cancel:hover {
+      background: #eae8e3;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 640px) {
+      .menu-admin-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .modal-box {
+        padding: 28px 20px;
+        border-radius: 24px;
+      }
+
+      .modal-box h2 {
+        font-size: 1.4rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- NAV -->
+  <nav>
+    <img src="public/images/logos/toran burger logo.svg" alt="Toran Burger" class="nav-logo" />
+    <a href="admin.html">Orders</a>
+    <a href="admin-analytics.html">Analytics</a>
+    <a href="admin-menu.html" class="active">Menu</a>
+  </nav>
+
+  <!-- MENU ADMIN -->
+  <div class="menu-admin">
+    <div class="menu-admin-header">
+      <h1 class="menu-admin-title">🍔 Menu Management</h1>
+      <button class="add-item-btn" onclick="openAddModal()">+ Add Item</button>
+    </div>
+
+    <div class="menu-admin-grid" id="menuGrid">
+      <!-- rendered by JS -->
+    </div>
+  </div>
+
+  <!-- ADD ITEM MODAL -->
+  <div class="modal-overlay" id="addModal">
+    <div class="modal-box">
+      <h2>Add New Item</h2>
+      
+      <div class="modal-field">
+        <label>Item Name</label>
+        <input type="text" id="itemName" placeholder="e.g. Double Cheese Burger" />
+      </div>
+
+      <div class="modal-field">
+        <label>Price (ETB)</label>
+        <input type="number" id="itemPrice" placeholder="e.g. 250" />
+      </div>
+
+      <div class="modal-field">
+        <label>Description</label>
+        <textarea id="itemDesc" placeholder="Describe the item..."></textarea>
+      </div>
+
+      <div class="modal-field">
+        <label>Tags</label>
+        <div class="modal-tags-group" id="tagGroup">
+          <label class="modal-tag-option">
+            <input type="checkbox" value="veg" /> 🌱 Veg
+          </label>
+          <label class="modal-tag-option">
+            <input type="checkbox" value="spicy" /> 🌶️ Spicy
+          </label>
+          <label class="modal-tag-option">
+            <input type="checkbox" value="popular" /> ⭐ Popular
+          </label>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn-submit" onclick="addMenuItem()">Add Item</button>
+        <button class="btn-cancel" onclick="closeAddModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer style="margin-top:20px;">
+    <div class="footer-brand">
+      <img src="public/images/logos/toran burger logo.svg" alt="Toran Burger" style="width:28px;height:28px;object-fit:contain;" />
+      Toran Burger Admin
+    </div>
+    <div class="footer-links">
+      <a href="admin.html">Orders</a>
+      <a href="admin-analytics.html">Analytics</a>
+      <a href="admin-menu.html">Menu</a>
+    </div>
+  </footer>
+
+  <script>
+    (function() {
+      // ── SAMPLE MENU DATA ──
+      let MENU_ITEMS = [
+        { id: 1, name: 'King Size Special', price: 400, desc: 'Double beef patty, cheese, lettuce, tomato, special sauce.', tags: ['popular', 'spicy'] },
+        { id: 2, name: 'Beef Burger', price: 200, desc: 'Classic beef patty with fresh veggies and sauce.', tags: [] },
+        { id: 3, name: 'Chicken Burger', price: 180, desc: 'Grilled chicken breast with garlic mayo and lettuce.', tags: ['veg'] },
+        { id: 4, name: 'Veggie Burger', price: 150, desc: 'Plant-based patty with avocado and roasted peppers.', tags: ['veg', 'popular'] },
+        { id: 5, name: 'Combo Meal', price: 350, desc: 'Burger, fries, and a drink.', tags: ['popular'] },
+        { id: 6, name: 'Fries', price: 60, desc: 'Crispy golden fries with sea salt.', tags: ['veg'] },
+        { id: 7, name: 'Beverage', price: 80, desc: 'Refreshing soft drink or iced tea.', tags: [] },
+        { id: 8, name: 'Spicy Crispy Chicken', price: 220, desc: 'Spicy breaded chicken with jalapeños and ranch.', tags: ['spicy', 'popular'] },
+      ];
+
+      let nextId = 9;
+
+      const grid = document.getElementById('menuGrid');
+
+      function renderMenu() {
+        grid.innerHTML = MENU_ITEMS.map(item => {
+          const tagHTML = item.tags.map(t => `<span class="menu-tag ${t}">${t}</span>`).join('');
+          return `
+            <div class="menu-item-card">
+              <div class="menu-item-top">
+                <span class="menu-item-name">${item.name}</span>
+                <span class="menu-item-price">${item.price} ETB</span>
+              </div>
+              <div class="menu-item-desc">${item.desc}</div>
+              <div class="menu-item-meta">${tagHTML}</div>
+              <div class="menu-item-actions">
+                <button class="edit-btn" onclick="alert('Edit ${item.name}')">✎ Edit</button>
+                <button class="delete-btn" onclick="deleteItem(${item.id})">✕ Delete</button>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      // ── DELETE ──
+      window.deleteItem = function(id) {
+        const item = MENU_ITEMS.find(i => i.id === id);
+        if (!item) return;
+        if (confirm(`Delete "${item.name}"?`)) {
+          MENU_ITEMS = MENU_ITEMS.filter(i => i.id !== id);
+          renderMenu();
+        }
+      };
+
+      // ── MODAL CONTROLS ──
+      window.openAddModal = function() {
+        document.getElementById('addModal').classList.add('visible');
+        document.getElementById('itemName').value = '';
+        document.getElementById('itemPrice').value = '';
+        document.getElementById('itemDesc').value = '';
+        document.querySelectorAll('#tagGroup input[type="checkbox"]').forEach(cb => cb.checked = false);
+        document.getElementById('itemName').focus();
+      };
+
+      window.closeAddModal = function() {
+        document.getElementById('addModal').classList.remove('visible');
+      };
+
+      // Close on overlay click
+      document.getElementById('addModal').addEventListener('click', function(e) {
+        if (e.target === this) closeAddModal();
+      });
+
+      // ── ADD ITEM ──
+      window.addMenuItem = function() {
+        const name = document.getElementById('itemName').value.trim();
+        const price = parseInt(document.getElementById('itemPrice').value);
+        const desc = document.getElementById('itemDesc').value.trim();
+        
+        if (!name) {
+          alert('Please enter an item name.');
+          document.getElementById('itemName').focus();
+          return;
+        }
+        if (!price || price <= 0) {
+          alert('Please enter a valid price.');
+          document.getElementById('itemPrice').focus();
+          return;
+        }
+
+        const tags = [];
+        document.querySelectorAll('#tagGroup input[type="checkbox"]:checked').forEach(cb => {
+          tags.push(cb.value);
+        });
+
+        const newItem = {
+          id: nextId++,
+          name: name,
+          price: price,
+          desc: desc || 'No description provided.',
+          tags: tags
+        };
+
+        MENU_ITEMS.push(newItem);
+        renderMenu();
+        closeAddModal();
+      };
+
+      // ── ENTER KEY TO SUBMIT ──
+      document.getElementById('itemName').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') document.getElementById('itemPrice').focus();
+      });
+      document.getElementById('itemPrice').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') document.getElementById('itemDesc').focus();
+      });
+      document.getElementById('itemDesc').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          addMenuItem();
+        }
+      });
+
+      // ── TAG TOGGLE VISUAL ──
+      document.querySelectorAll('.modal-tag-option').forEach(label => {
+        const checkbox = label.querySelector('input[type="checkbox"]');
+        checkbox.addEventListener('change', function() {
+          label.classList.toggle('selected', this.checked);
+        });
+        // Init state
+        if (checkbox.checked) label.classList.add('selected');
+      });
+
+      // ── INIT ──
+      renderMenu();
+    })();
+  </script>
+</body>
+</html>
