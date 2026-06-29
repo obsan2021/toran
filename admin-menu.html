@@ -172,7 +172,7 @@
       border-color: #dc2626;
     }
 
-    /* ── ADD ITEM MODAL ── */
+    /* ── MODAL OVERLAY (shared) ── */
     .modal-overlay {
       position: fixed;
       top: 0;
@@ -342,6 +342,15 @@
       background: #eae8e3;
     }
 
+    .modal-actions .btn-danger {
+      background: #dc2626;
+      color: #ffffff;
+    }
+
+    .modal-actions .btn-danger:hover {
+      background: #b91c1c;
+    }
+
     /* ── RESPONSIVE ── */
     @media (max-width: 640px) {
       .menu-admin-grid {
@@ -387,22 +396,22 @@
       
       <div class="modal-field">
         <label>Item Name</label>
-        <input type="text" id="itemName" placeholder="e.g. Double Cheese Burger" />
+        <input type="text" id="addItemName" placeholder="e.g. Double Cheese Burger" />
       </div>
 
       <div class="modal-field">
         <label>Price (ETB)</label>
-        <input type="number" id="itemPrice" placeholder="e.g. 250" />
+        <input type="number" id="addItemPrice" placeholder="e.g. 250" />
       </div>
 
       <div class="modal-field">
         <label>Description</label>
-        <textarea id="itemDesc" placeholder="Describe the item..."></textarea>
+        <textarea id="addItemDesc" placeholder="Describe the item..."></textarea>
       </div>
 
       <div class="modal-field">
         <label>Tags</label>
-        <div class="modal-tags-group" id="tagGroup">
+        <div class="modal-tags-group" id="addTagGroup">
           <label class="modal-tag-option">
             <input type="checkbox" value="veg" /> 🌱 Veg
           </label>
@@ -417,7 +426,62 @@
 
       <div class="modal-actions">
         <button class="btn-submit" onclick="addMenuItem()">Add Item</button>
-        <button class="btn-cancel" onclick="closeAddModal()">Cancel</button>
+        <button class="btn-cancel" onclick="closeModal('addModal')">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- EDIT ITEM MODAL -->
+  <div class="modal-overlay" id="editModal">
+    <div class="modal-box">
+      <h2>Edit Item</h2>
+      
+      <div class="modal-field">
+        <label>Item Name</label>
+        <input type="text" id="editItemName" placeholder="e.g. Double Cheese Burger" />
+      </div>
+
+      <div class="modal-field">
+        <label>Price (ETB)</label>
+        <input type="number" id="editItemPrice" placeholder="e.g. 250" />
+      </div>
+
+      <div class="modal-field">
+        <label>Description</label>
+        <textarea id="editItemDesc" placeholder="Describe the item..."></textarea>
+      </div>
+
+      <div class="modal-field">
+        <label>Tags</label>
+        <div class="modal-tags-group" id="editTagGroup">
+          <label class="modal-tag-option">
+            <input type="checkbox" value="veg" /> 🌱 Veg
+          </label>
+          <label class="modal-tag-option">
+            <input type="checkbox" value="spicy" /> 🌶️ Spicy
+          </label>
+          <label class="modal-tag-option">
+            <input type="checkbox" value="popular" /> ⭐ Popular
+          </label>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn-submit" onclick="updateMenuItem()">Save Changes</button>
+        <button class="btn-cancel" onclick="closeModal('editModal')">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- DELETE CONFIRM MODAL -->
+  <div class="modal-overlay" id="deleteModal">
+    <div class="modal-box" style="max-width:420px;text-align:center;">
+      <div style="font-size:3rem;margin-bottom:12px;">🗑️</div>
+      <h2 style="margin-bottom:8px;">Delete Item?</h2>
+      <p style="color:rgba(26,26,24,0.6);font-size:0.95rem;margin-bottom:24px;" id="deleteMessage">Are you sure you want to delete "<span id="deleteItemName"></span>"? This action cannot be undone.</p>
+      <div class="modal-actions">
+        <button class="btn-danger" onclick="confirmDelete()">Delete</button>
+        <button class="btn-cancel" onclick="closeModal('deleteModal')">Cancel</button>
       </div>
     </div>
   </div>
@@ -450,6 +514,8 @@
       ];
 
       let nextId = 9;
+      let editingId = null;
+      let deletingId = null;
 
       const grid = document.getElementById('menuGrid');
 
@@ -465,62 +531,70 @@
               <div class="menu-item-desc">${item.desc}</div>
               <div class="menu-item-meta">${tagHTML}</div>
               <div class="menu-item-actions">
-                <button class="edit-btn" onclick="alert('Edit ${item.name}')">✎ Edit</button>
-                <button class="delete-btn" onclick="deleteItem(${item.id})">✕ Delete</button>
+                <button class="edit-btn" onclick="openEditModal(${item.id})">✎ Edit</button>
+                <button class="delete-btn" onclick="openDeleteModal(${item.id})">✕ Delete</button>
               </div>
             </div>
           `;
         }).join('');
       }
 
-      // ── DELETE ──
-      window.deleteItem = function(id) {
-        const item = MENU_ITEMS.find(i => i.id === id);
-        if (!item) return;
-        if (confirm(`Delete "${item.name}"?`)) {
-          MENU_ITEMS = MENU_ITEMS.filter(i => i.id !== id);
-          renderMenu();
-        }
+      // ── MODAL HELPERS ──
+      window.closeModal = function(id) {
+        document.getElementById(id).classList.remove('visible');
       };
 
-      // ── MODAL CONTROLS ──
-      window.openAddModal = function() {
-        document.getElementById('addModal').classList.add('visible');
-        document.getElementById('itemName').value = '';
-        document.getElementById('itemPrice').value = '';
-        document.getElementById('itemDesc').value = '';
-        document.querySelectorAll('#tagGroup input[type="checkbox"]').forEach(cb => cb.checked = false);
-        document.getElementById('itemName').focus();
-      };
-
-      window.closeAddModal = function() {
-        document.getElementById('addModal').classList.remove('visible');
-      };
-
-      // Close on overlay click
-      document.getElementById('addModal').addEventListener('click', function(e) {
-        if (e.target === this) closeAddModal();
+      // Close modal on overlay click
+      document.querySelectorAll('.modal-overlay').forEach(modal => {
+        modal.addEventListener('click', function(e) {
+          if (e.target === this) {
+            this.classList.remove('visible');
+          }
+        });
       });
 
+      // ── TAG TOGGLE VISUAL ──
+      function setupTagToggles(groupId) {
+        document.querySelectorAll(`#${groupId} .modal-tag-option`).forEach(label => {
+          const checkbox = label.querySelector('input[type="checkbox"]');
+          checkbox.addEventListener('change', function() {
+            label.classList.toggle('selected', this.checked);
+          });
+          // Init state
+          if (checkbox.checked) label.classList.add('selected');
+        });
+      }
+
       // ── ADD ITEM ──
+      window.openAddModal = function() {
+        document.getElementById('addModal').classList.add('visible');
+        document.getElementById('addItemName').value = '';
+        document.getElementById('addItemPrice').value = '';
+        document.getElementById('addItemDesc').value = '';
+        document.querySelectorAll('#addTagGroup input[type="checkbox"]').forEach(cb => cb.checked = false);
+        document.querySelectorAll('#addTagGroup .modal-tag-option').forEach(label => label.classList.remove('selected'));
+        document.getElementById('addItemName').focus();
+        setupTagToggles('addTagGroup');
+      };
+
       window.addMenuItem = function() {
-        const name = document.getElementById('itemName').value.trim();
-        const price = parseInt(document.getElementById('itemPrice').value);
-        const desc = document.getElementById('itemDesc').value.trim();
+        const name = document.getElementById('addItemName').value.trim();
+        const price = parseInt(document.getElementById('addItemPrice').value);
+        const desc = document.getElementById('addItemDesc').value.trim();
         
         if (!name) {
           alert('Please enter an item name.');
-          document.getElementById('itemName').focus();
+          document.getElementById('addItemName').focus();
           return;
         }
         if (!price || price <= 0) {
           alert('Please enter a valid price.');
-          document.getElementById('itemPrice').focus();
+          document.getElementById('addItemPrice').focus();
           return;
         }
 
         const tags = [];
-        document.querySelectorAll('#tagGroup input[type="checkbox"]:checked').forEach(cb => {
+        document.querySelectorAll('#addTagGroup input[type="checkbox"]:checked').forEach(cb => {
           tags.push(cb.value);
         });
 
@@ -534,31 +608,109 @@
 
         MENU_ITEMS.push(newItem);
         renderMenu();
-        closeAddModal();
+        closeModal('addModal');
       };
 
-      // ── ENTER KEY TO SUBMIT ──
-      document.getElementById('itemName').addEventListener('keydown', function(e) {
-        if (e.key === 'Enter') document.getElementById('itemPrice').focus();
+      // ── EDIT ITEM ──
+      window.openEditModal = function(id) {
+        const item = MENU_ITEMS.find(i => i.id === id);
+        if (!item) return;
+        
+        editingId = id;
+        document.getElementById('editItemName').value = item.name;
+        document.getElementById('editItemPrice').value = item.price;
+        document.getElementById('editItemDesc').value = item.desc;
+        
+        // Set tags
+        const checkboxes = document.querySelectorAll('#editTagGroup input[type="checkbox"]');
+        checkboxes.forEach(cb => {
+          cb.checked = item.tags.includes(cb.value);
+        });
+        document.querySelectorAll('#editTagGroup .modal-tag-option').forEach(label => {
+          const cb = label.querySelector('input[type="checkbox"]');
+          if (cb.checked) label.classList.add('selected');
+          else label.classList.remove('selected');
+        });
+        
+        document.getElementById('editModal').classList.add('visible');
+        document.getElementById('editItemName').focus();
+        setupTagToggles('editTagGroup');
+      };
+
+      window.updateMenuItem = function() {
+        const name = document.getElementById('editItemName').value.trim();
+        const price = parseInt(document.getElementById('editItemPrice').value);
+        const desc = document.getElementById('editItemDesc').value.trim();
+        
+        if (!name) {
+          alert('Please enter an item name.');
+          document.getElementById('editItemName').focus();
+          return;
+        }
+        if (!price || price <= 0) {
+          alert('Please enter a valid price.');
+          document.getElementById('editItemPrice').focus();
+          return;
+        }
+
+        const tags = [];
+        document.querySelectorAll('#editTagGroup input[type="checkbox"]:checked').forEach(cb => {
+          tags.push(cb.value);
+        });
+
+        const item = MENU_ITEMS.find(i => i.id === editingId);
+        if (item) {
+          item.name = name;
+          item.price = price;
+          item.desc = desc || 'No description provided.';
+          item.tags = tags;
+          renderMenu();
+          closeModal('editModal');
+        }
+      };
+
+      // ── DELETE ITEM ──
+      window.openDeleteModal = function(id) {
+        const item = MENU_ITEMS.find(i => i.id === id);
+        if (!item) return;
+        
+        deletingId = id;
+        document.getElementById('deleteItemName').textContent = item.name;
+        document.getElementById('deleteModal').classList.add('visible');
+      };
+
+      window.confirmDelete = function() {
+        MENU_ITEMS = MENU_ITEMS.filter(i => i.id !== deletingId);
+        renderMenu();
+        closeModal('deleteModal');
+        deletingId = null;
+      };
+
+      // ── KEYBOARD SHORTCUTS ──
+      document.getElementById('addItemName').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') document.getElementById('addItemPrice').focus();
       });
-      document.getElementById('itemPrice').addEventListener('keydown', function(e) {
-        if (e.key === 'Enter') document.getElementById('itemDesc').focus();
+      document.getElementById('addItemPrice').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') document.getElementById('addItemDesc').focus();
       });
-      document.getElementById('itemDesc').addEventListener('keydown', function(e) {
+      document.getElementById('addItemDesc').addEventListener('keydown', function(e) {
         if (e.key === 'Enter' && !e.shiftKey) {
           e.preventDefault();
           addMenuItem();
         }
       });
 
-      // ── TAG TOGGLE VISUAL ──
-      document.querySelectorAll('.modal-tag-option').forEach(label => {
-        const checkbox = label.querySelector('input[type="checkbox"]');
-        checkbox.addEventListener('change', function() {
-          label.classList.toggle('selected', this.checked);
-        });
-        // Init state
-        if (checkbox.checked) label.classList.add('selected');
+      document.getElementById('editItemName').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') document.getElementById('editItemPrice').focus();
+      });
+      document.getElementById('editItemPrice').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') document.getElementById('editItemDesc').focus();
+      });
+      document.getElementById('editItemDesc').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          updateMenuItem();
+        }
       });
 
       // ── INIT ──
